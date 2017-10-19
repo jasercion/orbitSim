@@ -540,77 +540,20 @@ Attitude * makeAttTako(InitI *ini, EphemData *ephem) {
        }
      }
 
-       //END OF UPDATES THUS FAR  
-      } else if((match_str((const char*) ln, " Profile ") == 1) &&
-               (match_str((const char*) ln, "Begin") == 1)){
-
+     case Profile: {  
         mode = 3;
-        mjdt = getMJD(ln);
+	mjds = ;
+	mjde = ;
+	
+	//Need to handle rocking profile case:
 
-        while(fgets(ln, bufsz, ITL)) {
-          if((match_str((const char*) ln, " Slew ") == 1) &&
-                    (match_str((const char*) ln, "End") == 1)) {
-            mjds =getMJD(ln);
-
-          } else if ((match_str((const char*) ln, " Profile ") == 1) &&
-                     (match_str((const char*) ln, "End") == 1)) {
-            mjde =getMJD(ln);
-            break;
-
-          }else if((match_str((const char*) ln, " Rocking ") == 1) &&
-                    (match_str((const char*) ln, " Profile:") == 1)) {
-            if((fgets(ln, bufsz, ITL)) != NULL){
-              if(match_str((const char*) ln, " ROCKSTART ") == 1){
-                char *jnk = processline(ln, '=');
-                if (jnk != NULL) {
-                  char date[17];
-                  double ep;
-                  sscanf(jnk, "%s (%lf)", date, &ep);
-                  profile.epoch = do_met2mjd(ep);
-                }
-              }
-            } else {
-              throw std::runtime_error("ERROR: Could read TAKO Timeline any further\n");
-            }
-
-            if((fgets(ln, bufsz, ITL)) != NULL){
-              if(match_str((const char*) ln, " ROCKDEFAULT ") == 1){
-                char *jnk = processline(ln, '=');
-                double to;
-                if (jnk != NULL) {
-                  sscanf(jnk, "%lf", &to);
-                  profile.defofst = to;
-                }
-              }
-            } else {
-              throw std::runtime_error("ERROR: Could read TAKO Timeline any further\n");
-            }
-
-            if((fgets(ln, bufsz, ITL)) != NULL){
-              if((match_str((const char*) ln, " ROCKTIME ") == 1) &&
-                 (match_str((const char*) ln, " ROCKANGLE") == 1)){
-                int i = 0;
-                for(i=0; i<17; i++){
-                  if((fgets(ln, bufsz, ITL)) != NULL){
-                    int idx;
-                    double tm, an;
-                    char jnk[24];
-                    sscanf(ln, "%s%02d %lf %lf", jnk, &idx, &tm, &an);
-                    losf.info(6) << "While Reading line: "<<ln<<"\n"<<i<<") Got Angle: "<<an<<"Time: "<<tm<<"\n";
-                    profile.ofsts[i] = an;
-                    profile.times[i] = tm;
-                  } else {
-                    throw std::runtime_error("ERROR: Could read TAKO Timeline any further\n");
-                  }
-                }
-              }
-            } else {
-              throw std::runtime_error("ERROR: Could read TAKO Timeline any further\n");
-            }
-          } // End of else if Rocking Profile
-        }   /* end of while(fgets(ln, bufsz, ITL)) */
-      } /* end of Profile Begin */
-
+	profile.epoch = //evt.*.rockstart;
+	profile.defofst = //evt.*.rockdefault;
+	  for(unsigned i; i<pairs.sizeof(), i++){
+	    profile.ofsts[i] = rockangle[i];
+	    profile.times[i] = rocktime[i];
+	  }
+	  
       losf.info(3) << "mode="<<mode<<", mjdt="<<mjdt<<", mjds="<<mjds<<", mjde="<<mjde<<"\n";
 
       if(flg > 0){
