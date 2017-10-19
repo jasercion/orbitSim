@@ -431,14 +431,9 @@ Attitude * makeAttTako(InitI *ini, EphemData *ephem) {
     
     //If a timeline is provided to gtorbsim it should be able to access all initial data for spacecraft from the header.  Need to
     //Allow for user input as well though, handle in main?
-
-    // double pra = ini->Ira; // Initial spacecraft ra
       double pra = tl.initial.RA;
-    // double pdec = ini->Idec; // Initial spacecraft dec
       double pdec = tl.initial.DEC;
-    // double tl_start = 0.0; //Timeline Start MJD
       double tl_start = do_utcj2mjd(tl.header.start_time); 
-    // double tl_end = 0.0;   //Timeline End MJD
       double tl_end = do_utcj2mjd(tl.header.stop_time);
       double res = ini->Resolution;  //convert resolution in days for mjd
 
@@ -460,32 +455,7 @@ Attitude * makeAttTako(InitI *ini, EphemData *ephem) {
       int yyy, doy, hh, mm, ss; //Should be superfluous now
       char lineBuf[bufsz]; //Ditto
 
-// Parser makes the following block superfluous.  Tl start time set at top
-   // Loop to find the beginning of the first command in the timeline.  Use the timestamp for this command as the timeline start time.
-
-   // while(fgets(ln,bufsz, ITL)) {
-   //   strcpy(lineBuf,ln);
-   // 	   if (match_str((const char*) ln, "Begin") == 1) {
-   // 		   break;
-   // 	   }
-   // }
-
-   // char *LB = strtok(lineBuf, " ");
-   // LB = strtok(NULL, " ");
-   // sscanf(LB, "%d/%d:%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
-   // tl_start = do_utcj2mjd (yyy, doy, hh, mm, ss);
-
-   // Continue looping until the last line of the timeline is found.  Use the last line's timestamp as the timeline end time.
-   // while(fgets(ln, bufsz, ITL)) {
-   //   strcpy(lineBuf,ln);
-   //   LB = strtok(lineBuf, " ");
-   //   LB = strtok(NULL, " ");
-   //   if (LB != NULL)
-   //     sscanf(LB, "%d/%d:%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
-   // }
-   // tl_end = do_utcj2mjd (yyy, doy, hh, mm, ss);
-
-//Sanity check
+   //Sanity check
    if (tl_start == tl_end)
      throw std::runtime_error(
          "\nERROR: Invalid Time Range. ATS Timeline begin and end times are equal. Check Timeline Format!");
@@ -503,19 +473,6 @@ Attitude * makeAttTako(InitI *ini, EphemData *ephem) {
      ini->stop_MJD = tl_end;
    }
 
-// No more file input buffer manipulations!  :)
-   //Reset the file input buffer so that looping restarts from the beginning.
-   //memset(ln,'0',bufsz);
-   //ITL=fopen(ini->TLname.c_str(),"r");
-
-   // Loop until a command keyword is identified and act accordingly.
-   //while(fgets(ln, bufsz, ITL)) {
-
-      // if(strlen(ln) == 1){
-      //   continue;
-      // }
-      // if((match_str((const char*) ln, " Survey ") == 1) &&
-      //    (match_str((const char*) ln, "Begin") == 1)){
    for (unsigned i=0; i<tl.event.size(); i++) {
      //Section for variables which are common to all operation types
      mjdt = do_utcj2mjd(tl.events[i].timestamp);
@@ -527,27 +484,9 @@ Attitude * makeAttTako(InitI *ini, EphemData *ephem) {
        offset = tl.events[i].additional.offset;
        mjds = //Slew end time?;
        mjde = //Survey end time?;
-        //mjdt = getMJD(ln);
-        //      printf("SURVEY from %s ==> %f\n", ln, mjdt);
 
-        // while(fgets(ln, bufsz, ITL)) {
-        //   if ((match_str((const char*) ln, " offset ") == 1)){
-        //     char *jnk = processline(ln, '=');
-        //     if (jnk != NULL) {
-        //       sscanf(jnk, "%lf", &offset);
-        //     }
-        //   } else if((match_str((const char*) ln, " Slew ") == 1) &&
-        //             (match_str((const char*) ln, "End") == 1)) {
-        //     mjds =getMJD(ln);
-
-        //   } else if ((match_str((const char*) ln, " Survey ") == 1) &&
-        //              (match_str((const char*) ln, "End") == 1)) {
-        //     mjde =getMJD(ln);
-        //     break;
-        //   }
        if(offset <-180.0 || offset > 180.0){
 	 losf.warn(1) << "\t\t\tERROR:\nFixed Survey Observation starting at MJD " << mjdt << "\nDOES NOT have a proper offset (" << offset << ")\n\n";
-
 	 flg = 3;
        }
        if(mjde < mjdt){
@@ -566,6 +505,7 @@ Attitude * makeAttTako(InitI *ini, EphemData *ephem) {
 	 mjds = mjdt;
        }
      }
+       
      case Obs: {
        mode 2;
        mjds = ;
@@ -600,92 +540,7 @@ Attitude * makeAttTako(InitI *ini, EphemData *ephem) {
        }
      }
 
-       
-        // There could be cases where there is no slewing,
-        // in such cases the end slew is the same as the
-        // starting of the observation.
-
-        // if(mjds == 0.0){
-        //   mjds = mjdt;
-        // }
-
-        // //  Some sanity checks
-
-        // if(offset <-180.0 || offset > 180.0){
-        //   losf.warn(1) << "\t\t\tERROR:\nFixed Survey Observation starting at MJD " << mjdt << "\nDOES NOT have a proper offset (" << offset << ")\n\n";
-
-        //   flg = 3;
-        // }
-        // if(mjde < mjdt){
-        //   losf.warn(1)  << "\t\t\tERROR:\nFixed Survey Observation starting at MJD " << mjdt << "\nwill end at an earlier time " << mjde << "\n\n";
-        //   flg = 3;
-        // }
-        // if(mjde < mjds){
-        //   losf.warn(1)  << "\t\t\tERROR:\nFixed Survey Observation starting at MJD " << mjdt << "\nends at " << mjde << ", but the end slew is at " << mjds << "\n\n";
-
-        //   flg = 3;
-        // }
-
-      // } else if(tl.events[i].event_type == "Obs") &&
-      //          (match_str((const char*) ln, "Begin") == 1)){
-      //   mode = 2;
-      //   mjdt = getMJD(ln);
-      //   //      printf("POINTED from %s ==> %f\n", ln, mjdt);
-      //   while(fgets(ln, bufsz, ITL)) {
-      //     if ((match_str((const char*) ln, " RA ") == 1) &&
-      //               (match_str((const char*) ln, "^//") == 1)){
-      //       char *jnk = processline(ln, '=');
-      //       if (jnk != NULL) {
-      //         sscanf(jnk, "%lf", &ra);
-      //       }
-      //     }else if ((match_str((const char*) ln, " dec ") == 1) &&
-      //               (match_str((const char*) ln, "^//") == 1)){
-      //       char *jnk = processline(ln, '=');
-      //       if (jnk != NULL) {
-      //         sscanf(jnk, "%lf", &dec);
-      //       }
-      //     } else if((match_str((const char*) ln, " Slew ") == 1) &&
-      //               (match_str((const char*) ln, "End") == 1) &&
-      //               (mode != -1)) {
-      //       mjds =getMJD(ln);
-
-      //     } else if ((match_str((const char*) ln, " Obs ") == 1) &&
-      //                (match_str((const char*) ln, "End") == 1)&&
-      //               (mode != -1)) {
-      //       mjde =getMJD(ln);
-      //       break;
-      //     }
-      //   }
-
-
-        // There could be cases where there is no slewing,
-        // in such cases the end slew is the same as the
-        // starting of the observation.
-
-        // if(mjds == 0.0){
-        //   mjds = mjdt;
-        // }
-
-
-        // //  Some sanity checks
-
-        // if(ra <0.0 || ra > 360.0){
-        //   losf.warn(1) << "\t\t\tERROR:\nPointed Observation starting at MJD " << mjdt << "\nDOES NOT have a proper RA (" << ra << ")\n\n";
-        //   flg = 3;
-        // }
-        // if(dec <-90.0 || dec > 90.0){
-        //   losf.warn(1) << "\t\t\tERROR:\nPointed Observation starting at MJD " << mjdt << "\nDOES NOT have a proper DEC (" << dec << ")\n\n";
-        //   flg = 3;
-        // }
-        // if(mjde < mjdt){
-        //   losf.warn(1) << "\t\t\tERROR:\nPointed Observation starting at MJD " << mjdt << "\nwill end at an earlier time " << mjde << "\n\n";
-        //   flg = 3;
-        // }
-        // if(mjde < mjds){
-        //   losf.warn(1) << "\t\t\tERROR:\nPointed Observation starting at MJD " << mjdt << "\nends at " << mjde << ", but the end slew is at " << mjds << "\n\n";
-        //   flg = 3;
-        // }
-
+       //END OF UPDATES THUS FAR  
       } else if((match_str((const char*) ln, " Profile ") == 1) &&
                (match_str((const char*) ln, "Begin") == 1)){
 
