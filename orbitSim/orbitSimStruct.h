@@ -11,6 +11,7 @@
 #define orbitSimStruct_h
 
 #include <string>
+#include <timeline.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,8 +33,8 @@ typedef struct {
   double start_MJD;    
   /// stopping time in MJD
   double stop_MJD;     
-  /// Timeline file name, path included
-  std::string TLname; 
+  /// Reference to timeline object from boost parser
+  timeline timeline; 
   /// Timeline type (TAKO, ASFLOWN, or SINGLE)
   std::string TLtype;      
   /// Ephemeris file name, path included  
