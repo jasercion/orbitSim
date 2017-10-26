@@ -426,7 +426,7 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
       ra = -999.0;
       dec = -999.0;
     }
-  }
+
 
   // Calculate target occultation and limb trace
   if (ini->occflag == 1) {
@@ -513,17 +513,17 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
         // For testing, all of this needs to be output to a file for compairison.
         // Begin Regression Testing portion:
         // Output values below:
-        takoTestFile << "MJD = " << OAtt->mjd[k] << " , ";
-        takoTestFile << "SatRA = " << OAtt->SatRA[k] << " , ";
-        takoTestFile << "SatDEC = " << OAtt->SatDEC[k] << " , ";
-        takoTestFile << "Xra = " << OAtt->Xra[k] << " , ";
-        takoTestFile << "Xdec = " << OAtt->Xdec[k] << " , ";
-        takoTestFile << "Yra = " << OAtt->Yra[k] << " , ";
-        takoTestFile << "Ydec = " << OAtt->Ydec[k] << " , ";
-        takoTestFile << "Zra = " << OAtt->Zra[k] << " , ";
-        takoTestFile << "Zdec = " << OAtt->Zdec[k] << " , ";
-        takoTestFile << "SatRA = " << OAtt->SatRA[k] << " , ";
-        takoTestFile << "RockAngle = " << OAtt->rockAngle[k] << "\n";
+	//takoTestFile << "MJD = " << OAtt->mjd[k] << " , ";
+        //takoTestFile << "SatRA = " << OAtt->SatRA[k] << " , ";
+        //takoTestFile << "SatDEC = " << OAtt->SatDEC[k] << " , ";
+        //takoTestFile << "Xra = " << OAtt->Xra[k] << " , ";
+        //takoTestFile << "Xdec = " << OAtt->Xdec[k] << " , ";
+        //takoTestFile << "Yra = " << OAtt->Yra[k] << " , ";
+        //takoTestFile << "Ydec = " << OAtt->Ydec[k] << " , ";
+        //takoTestFile << "Zra = " << OAtt->Zra[k] << " , ";
+        //takoTestFile << "Zdec = " << OAtt->Zdec[k] << " , ";
+        //takoTestFile << "SatRA = " << OAtt->SatRA[k] << " , ";
+        //takoTestFile << "RockAngle = " << OAtt->rockAngle[k] << "\n";
         // End Regression Testing portion.
 
         RAtt->mjd[k] = OAtt->mjd[i];
@@ -548,8 +548,6 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
     }
   }
 
-  takoTestFile.close();
-
   // Only Reallocate if there's a reason to reallocate
   if (k < oinum)
     RAtt = reallocateAttitude((oinum - (oinum - k)), RAtt);
@@ -565,8 +563,6 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
 // makeAttAsFl does all of the heavy lifting for the AsFlown timeline attitude calculation
 Attitude* makeAttAsFl(InitI* ini, EphemData* ephem)
 {
-  FILE* ITL;
-  FILE* OutF = NULL;
   double Timespan, res;
   int inum, oinum, i;
 
@@ -613,13 +609,9 @@ Attitude* makeAttAsFl(InitI* ini, EphemData* ephem)
 
   char ln[bufsz];
 
-  if ((ITL = fopen(ini->TLname.c_str(), "r")) == NULL) {
-    std::string fname(ini->TLname);
-    throw std::runtime_error("\nCound not open Timeline file " + fname);
-  } else {
     double pra = ini->Ira; // Initial spacecraft ra
     double pdec = ini->Idec; // Initial spacecraft dec
-    double res = ini->Resolution; //Resolution already converted to days.
+    res = ini->Resolution; //Resolution already converted to days.
     int mode = -1; // Used to distinguish between Survey (1) and Pointed (2)
     int type = -1; // Used to distinguish between simple Survey (1) and Profiled survey (2)
     double offset = -999.0; // Rocking angle offset
@@ -633,11 +625,11 @@ Attitude* makeAttAsFl(InitI* ini, EphemData* ephem)
     bool inertialOpen = 0; // Used to indicate whether an inertial point maneuver is sill 'open' or not at the current parsed line
 
     // Adding Time range checking of AFS schedule by parsing default Filename
-    std::string token = ini->TLname.substr(0, ini->TLname.find("_")); //Find Filename Start. should be AFST
+    std::string token = ini->timeline.filename.substr(0, ini->timeline.filename.find("_")); //Find Filename Start. should be AFST
     if (!strcmp(token.c_str(), "AFST"))
       std::runtime_error("\nERROR: ASFLOWN mode with non-AFST timeline!\n");
-    std::string start_time = ini->TLname.substr(token.length() + 1, 11); //Find the start time string
-    std::string stop_time = ini->TLname.substr(token.length() + 1 + start_time.length() + 1, 11); //Find the end time string
+    std::string start_time = ini->timeline.filename.substr(token.length() + 1, 11); //Find the start time string
+    std::string stop_time = ini->timeline.filename.substr(token.length() + 1 + start_time.length() + 1, 11); //Find the end time string
     int start_yr, start_day, start_hr, start_min;
     sscanf(start_time.substr(0, 4).c_str(), "%d", &start_yr);
     sscanf(start_time.substr(4, 3).c_str(), "%d", &start_day);
@@ -1130,8 +1122,8 @@ Attitude* doCmd(InitI* ini, EphemData* ephem)
   }
 
   // Identify which command mode (SURVEY, PROFILE, or OBS) is being issued and act appropriately.
-  if (match_str((const char*)ini->TLname.c_str(), "SURVEY") == 1) {
-    std::string jnk = ini->TLname;
+  if (match_str((const char*)ini->timeline.filename.c_str(), "SURVEY") == 1) {
+    std::string jnk = ini->timeline.filename;
     char* TL = strtok((char*)jnk.c_str(), "|");
     TL = strtok(NULL, "|");
     double offset;
@@ -1199,8 +1191,8 @@ Attitude* doCmd(InitI* ini, EphemData* ephem)
       //doSurvey(ini->start_MJD, ini->stop_MJD, ini->Resolution,
       //        ini->Ira, ini->Idec, offset, ephem, OAtt);
     }
-  } else if (match_str(ini->TLname.c_str(), "PROFILED") == 1) {
-    std::string jnk = ini->TLname;
+  } else if (match_str(ini->timeline.filename.c_str(), "PROFILED") == 1) {
+    std::string jnk = ini->timeline.filename;
     char* TL = strtok((char*)jnk.c_str(), "|");
     TL = strtok(NULL, "|");
     double epoch;
@@ -1275,9 +1267,9 @@ Attitude* doCmd(InitI* ini, EphemData* ephem)
     MakeProfiled(ini->start_MJD, ini->stop_MJD, ini->Resolution,
         ini->Ira, ini->Idec, epoch, tms, ofst, ephem, OAtt, ini->start_MJD);
 
-  } else if (match_str(ini->TLname.c_str(), "POINTED") == 1) {
+  } else if (match_str(ini->timeline.filename.c_str(), "POINTED") == 1) {
 
-    std::string jnk = ini->TLname;
+    std::string jnk = ini->timeline.filename;
     char* TL = strtok((char*)jnk.c_str(), "|");
     TL = strtok(NULL, "|");
     double ra, dec, offset;
@@ -1323,7 +1315,7 @@ Attitude* doCmd(InitI* ini, EphemData* ephem)
 
     std::ostringstream eBuf;
     eBuf << "\n"
-         << __FILE__ << ":" << __LINE__ << " ERROR: doCmd SINGLE command " << ini->TLname << " is unknown!\nExiting now........................\n\n"
+         << __FILE__ << ":" << __LINE__ << " ERROR: doCmd SINGLE command " << ini->timeline.filename << " is unknown!\nExiting now........................\n\n"
          << std::ends;
 
     throw std::runtime_error(eBuf.str());
