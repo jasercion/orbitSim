@@ -100,11 +100,6 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
   oinum = inum;
 
   char ln[bufsz];
-
-  if ((ITL = fopen(ini->TLname.c_str(), "r")) == NULL) {
-    std::string fname(ini->TLname);
-    throw std::runtime_error("\nCound not open Timeline file " + fname);
-  } else {
     double pra = ini->Ira; // Initial spacecraft ra
     double pdec = ini->Idec; // Initial spacecraft dec
     double tl_start = 0.0; //Timeline Start MJD
