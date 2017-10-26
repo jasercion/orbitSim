@@ -75,11 +75,6 @@ char* processline(char* ln, char find)
 // makeAttTako does all of the heavy lifting for the TAKO timeline attitude calculation
 Attitude* makeAttTako(InitI* ini, EphemData* ephem)
 {
-
-  // Create and Open regression test file object first (Todo: Handle this better later.) ~JA 20140908
-  std::ofstream takoTestFile;
-  takoTestFile.open("TakoAttitude.out");
-
   FILE* ITL;
   FILE* OutF = NULL;
   double Timespan, res;
@@ -144,11 +139,6 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
     sscanf(LB, "%d/%d:%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
     tl_start = do_utcj2mjd(yyy, doy, hh, mm, ss);
 
-    // Continue looping until the last line of the timeline is found.  Use the last line's timestamp as the timeline end time.
-    while (fgets(ln, bufsz, ITL)) {
-      strcpy(lineBuf, ln);
-    }
-
     LB = strtok(lineBuf, " ");
     LB = strtok(NULL, " ");
     sscanf(LB, "%d/%d:%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
@@ -164,10 +154,6 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
       losf.warn(1) << "WARNING: stop_mjd=" << ini->stop_MJD << " exceeds ATS Timeline End=" << tl_end << ". Orbitsim will only run up to mjd=" << tl_end << "\n";
       ini->stop_MJD = tl_end;
     }
-
-    //Reset the file input buffer so that looping restarts from the beginning.
-    memset(ln, '0', bufsz);
-    ITL = fopen(ini->TLname.c_str(), "r");
 
     // Loop until a command keyword is identified and act accordingly.
     /* while (fgets(ln, bufsz, ITL)) { */
@@ -584,10 +570,6 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
 // makeAttAsFl does all of the heavy lifting for the AsFlown timeline attitude calculation
 Attitude* makeAttAsFl(InitI* ini, EphemData* ephem)
 {
-
-  std::ofstream asflTestFile;
-  asflTestFile.open("ASFLAttitude.out");
-
   FILE* ITL;
   FILE* OutF = NULL;
   double Timespan, res;
