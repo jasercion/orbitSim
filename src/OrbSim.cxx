@@ -104,7 +104,7 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
     double pdec = ini->Idec; // Initial spacecraft dec
     double tl_start = 0.0; //Timeline Start MJD
     double tl_end = 0.0; //Timeline End MJD
-    double res = ini->Resolution; //convert resolution in days for mjd
+    res = ini->Resolution; //convert resolution in days for mjd
     int flg = 0; // Multipurpose flag (mostly used for errors).  Todo: Should split this flag variable into several single-task oriented flags. ~JA 20141008
     double mjdt = 0.0; //Profile Start MJD
     int mode = -1; // Mode 1 = Survey, Mode 2 = Obs, Mode 3 = Profile
@@ -154,28 +154,28 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
     /* while (fgets(ln, bufsz, ITL)) { */
     for (int i = 0; i < ini->timeline.events.size(); ++i){
 
-      timeline_event ev = ini->timeline.events[i];
+      client::timeline_event ev = ini->timeline.events[i];
 
       // Event is a Survey
       if (ev.event_name == "Survey" && ev.event_type == "Begin"){
 
         // set modes and the start time (mjdt) and offset
         mode = 1;
-        mjdt = getMJD(ev.timestamp);
+        mjdt = getMJD(const_cast<char*>(ev.timestamp.c_str()));
         offset = ev.additional.offset;
 
         // Loop over remaining events to set endtime (mjde) and slew time (mjds)
         for (int j = i+i; j < ini->timeline.events.size(); ++j){
 
-          timeline_event future_ev = ini->timeline.events[j];
+          client::timeline_event future_ev = ini->timeline.events[j];
 
           if (future_ev.event_name == "Survey" && ev.event_type == "End"){
-            mjde = getMJD(future_ev.timestamp); /* Found the end of this survey */
+            mjde = getMJD(const_cast<char *>(future_ev.timestamp.c_str())); /* Found the end of this survey */
             break;
           }
 
           if (future_ev.event_name == "Slew" && ev.event_type == "End")
-            mjds = getMJD(future_ev.timestamp);  /*  and continue */
+            mjds = getMJD(const_cast<char *>(future_ev.timestamp.c_str()));  /*  and continue */
         }
 
         if (mjds == 0.) mjds = mjdt;
@@ -186,22 +186,22 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
       else if (ev.event_name == "Obs" && ev.event_type == "Begin"){
 
         mode = 2;
-        mjdt = getMJD(ev.timestamp);
+        mjdt = getMJD(const_cast<char *>(ev.timestamp.c_str()));
         ra = ev.additional.RA;
         ra = ev.additional.DEC;
 
         // Loop over remaining events to set endtime (mjde) and slew time (mjds)
         for (int j = i+i; j < ini->timeline.events.size(); ++j){
 
-          timeline_event future_ev = ini->timeline.events[j];
+          client::timeline_event future_ev = ini->timeline.events[j];
 
           if (future_ev.event_name == "Obs" && ev.event_type == "End"){
-            mjde = getMJD(future_ev.timestamp); /* Found the end of this survey */
+            mjde = getMJD(const_cast<char *>(future_ev.timestamp.c_str())); /* Found the end of this survey */
             break;
           }
 
           if (future_ev.event_name == "Slew" && ev.event_type == "End")
-            mjds = getMJD(future_ev.timestamp);  /*  and continue */
+            mjds = getMJD(const_cast<char *>(future_ev.timestamp.c_str()));  /*  and continue */
         }
 
         if (mjds == 0.) mjds = mjdt;
@@ -212,7 +212,7 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
       else if (ev.event_name == "Profile" && ev.event_type == "Begin"){
 
         mode = 2;
-        mjdt = getMJD(ev.timestamp);
+        mjdt = getMJD(const_cast<char*>(ev.timestamp.c_str()));
         profile.epoch = do_met2mjd(ev.additional.profile.rockstart_met);
         profile.defofst = do_met2mjd(ev.additional.profile.rockdefault);
 
@@ -224,15 +224,15 @@ Attitude* makeAttTako(InitI* ini, EphemData* ephem)
         // Loop over remaining events to set endtime (mjde) and slew time (mjds)
         for (int j = i+i; j < ini->timeline.events.size(); ++j){
 
-          timeline_event future_ev = ini->timeline.events[j];
+          client::timeline_event future_ev = ini->timeline.events[j];
 
           if (future_ev.event_name == "Profile" && ev.event_type == "End"){
-            mjde = getMJD(future_ev.timestamp); /* Found the end of this survey */
+            mjde = getMJD(const_cast<char *>(future_ev.timestamp.c_str())); /* Found the end of this survey */
             break;
           }
 
           if (future_ev.event_name == "Slew" && ev.event_type == "End")
-            mjds = getMJD(future_ev.timestamp);  /*  and continue */
+            mjds = getMJD(const_cast<char *>(future_ev.timestamp.c_str()));  /*  and continue */
         }
 
         if (mjds == 0.) mjds = mjdt;
