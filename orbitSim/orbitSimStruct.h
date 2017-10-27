@@ -11,7 +11,7 @@
 #define orbitSimStruct_h
 
 #include <string>
-#include <timeline.h>
+#include "src/timeline.h"
 
 #ifdef __cplusplus
 extern "C" {
