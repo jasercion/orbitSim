@@ -5,7 +5,7 @@ HD_COMPONENT_VERS       =
 HD_LIBRARY_ROOT         = orbitSim
 
 HD_LIBRARY_SRC_cxx      = timeline.cxx \
-													GLAST_slew_estimate.cxx \
+                          GLAST_slew_estimate.cxx \
                           OrbSim.cxx \
                           atFunctions.cxx \
                           functUtil.cxx \
