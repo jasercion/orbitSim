@@ -1,2 +1,8 @@
 CVS
 tags
+tags.lock
+tags.temp
+*.o
+*.so
+*.dylib
+gtorbsim

@@ -8,7 +8,6 @@
  * 2009/12/16 23:20:39 elwinter Exp $
  */
 
-
 #include "orbitSim/OrbSim.h"
 #include "orbitSim/atFunctions.h"
 #include "orbitSim/functions.h"
@@ -30,6 +29,414 @@
 
 /// Stream to control output through verbosity level
 st_stream::StreamFormatter losf("OrbSim", "", 2);
+
+// Parse the initial parameters passed from the top level main function.
+int
+parseInit(const char* fname, InitI* inA)
+{
+
+  FILE* inf;
+  char ln[bufsz];
+  const int itm = 12;
+  int it = 0;
+
+  losf.setMethod("parseInit");
+
+  if ((inf = fopen(fname, "r")) == NULL)
+  {
+    std::string name(fname);
+    throw std::runtime_error("Cound not open init file:\n" + name);
+  }
+  else
+  {
+
+    while (fgets(ln, bufsz, inf))
+    {
+      //      printf("Found line: %s\n", ln);
+      ln[strlen(ln) - 1] = '\0';
+
+      while (match_str((const char*)ln, "^ ") == 1)
+      {
+        char* tln = processline(ln, ' ');
+        strcpy(ln, tln);
+      }
+
+      if (match_str((const char*)ln, "^#") == 1)
+      {
+        //      printf("Ignored line: %s\n", ln);
+        continue;
+      }
+      else if (match_str((const char*)ln, "^start_MJD") == 1)
+      {
+        double t = -1.0;
+        ;
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+          sscanf(jnk, "%lf", &t);
+          if (t > 0.0)
+          {
+            inA->start_MJD = t;
+            it++;
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^stop_MJD") == 1)
+      {
+        double t = -1.0;
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+          sscanf(jnk, "%lf", &t);
+          if (t > 0.0)
+          {
+            inA->stop_MJD = t;
+            it++;
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^EAA") == 1)
+      {
+        double t = 99999.0;
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+          sscanf(jnk, "%lf", &t);
+          if ((t >= 0.0 && t <= 180.0))
+          {
+            inA->EAA = t;
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^Initial_RA") == 1)
+      {
+        double t = 99999.0;
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+          sscanf(jnk, "%lf", &t);
+          if ((t >= 0.0 && t <= 360.0) || (t >= -180.0 && t <= 180.0))
+          {
+            inA->Ira = t;
+            it++;
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^Initial_DEC") == 1)
+      {
+        double t = 99999.0;
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+          sscanf(jnk, "%lf", &t);
+          if ((t >= -90.0 && t <= 90.0) || (t >= 0.0 && t <= 180.0))
+          {
+            inA->Idec = t;
+            it++;
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^Earth_Avoid") == 1)
+      {
+        int flgocc = 1;
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+          sscanf(jnk, "%d", &flgocc);
+          if (flgocc <= 0)
+          {
+            inA->occflag = 0;
+            losf.out() << "Earth avoidance is disabled\n\n";
+          }
+          else if (flgocc >= 1)
+          {
+            inA->occflag = 1;
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^Timeline") == 1)
+      {
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+
+          // Removing initial space in any
+          while (jnk[0] == ' ')
+          {
+            ++jnk;
+          }
+
+          int lenj = strlen(jnk);
+          if (lenj > 0 && jnk[0] != '#')
+          {
+            char* TL;
+            if (jnk[0] == '|')
+            {
+              TL = strtok(jnk, "#");
+            }
+            else
+            {
+              TL = strtok(jnk, " #");
+            }
+            int len = strlen(TL);
+            if (len > 0)
+            {
+              inA->TLname.assign(TL);
+              it++;
+            }
+            else
+            {
+              inA->TLname.assign("Not specified");
+            }
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^TLType") == 1)
+      {
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+
+          // Removing initial space in any
+          while (jnk[0] == ' ')
+          {
+            ++jnk;
+          }
+          int lenj = strlen(jnk);
+          if (lenj > 0 && jnk[0] != '#')
+          {
+            char* TL = strtok(jnk, " #");
+            inA->TLtype.assign(TL);
+            int len = strlen(TL);
+            if (len > 0)
+            {
+              inA->TLtype.assign(TL);
+              it++;
+            }
+          }
+          else
+          {
+            inA->TLtype.assign("Not Specified");
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^EphemName") == 1)
+      {
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+
+          // Removing initial space in any
+          while (jnk[0] == ' ')
+          {
+            ++jnk;
+          }
+          int lenj = strlen(jnk);
+          if (lenj > 0 && jnk[0] != '#')
+          {
+            char* TL = strtok(jnk, " #");
+            int len = strlen(TL);
+            if (len > 0)
+            {
+              inA->EPHname.assign(TL);
+              it++;
+            }
+          }
+          else
+          {
+            inA->EPHname.assign("Not Specified");
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^EphemFunc") == 1)
+      {
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+
+          // Removing initial space in any
+          while (jnk[0] == ' ')
+          {
+            ++jnk;
+          }
+          int lenj = strlen(jnk);
+          if (lenj > 0)
+          {
+            char* TL = strtok(jnk, " #");
+            int len = strlen(TL);
+            if (len > 0 && jnk[0] != '#')
+            {
+              inA->EPHfunc.assign(TL);
+              it++;
+            }
+          }
+          else
+          {
+            inA->EPHfunc.assign("Not Specified");
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^OutPutFile") == 1)
+      {
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+
+          // Removing initial space in any
+          while (jnk[0] == ' ')
+          {
+            ++jnk;
+          }
+          int lenj = strlen(jnk);
+          if (lenj > 0 && jnk[0] != '#')
+          {
+            char* TL = strtok(jnk, " #");
+            int len = strlen(TL);
+            if (len > 0)
+            {
+              inA->OutFile.assign(TL);
+              it++;
+            }
+          }
+          else
+          {
+            inA->OutFile.assign("Not Specified");
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^OptFile") == 1)
+      {
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+
+          // Removing initial space in any
+          while (jnk[0] == ' ')
+          {
+            ++jnk;
+          }
+          int lenj = strlen(jnk);
+          if (lenj > 0 && jnk[0] != '#')
+          {
+            char* TL = strtok(jnk, " #");
+            int len = strlen(TL);
+            if (len > 0)
+            {
+              inA->OptFile.assign(TL);
+            }
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^saafile") == 1)
+      {
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+
+          // Removing initial space in any
+          while (jnk[0] == ' ')
+          {
+            ++jnk;
+          }
+          int lenj = strlen(jnk);
+          if (lenj > 0 && jnk[0] != '#')
+          {
+            char* TL = strtok(jnk, " #");
+            int len = strlen(TL);
+            if (len > 0)
+            {
+              inA->saafile.assign(TL);
+              it++;
+            }
+          }
+          else
+          {
+            inA->saafile.assign("Not Specified");
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^Units") == 1)
+      {
+        double t = -1.0;
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+          sscanf(jnk, "%lf", &t);
+          if (t > 0.0)
+          {
+            inA->Units = t;
+            it++;
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^Resolution") == 1)
+      {
+        double t = -1.0;
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+          sscanf(jnk, "%lf", &t);
+          if (t > 0.0)
+          {
+            inA->Resolution = t;
+            it++;
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^Chatter") == 1)
+      {
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+          int t = -1;
+          sscanf(jnk, "%d", &t);
+          if (t > 0)
+          {
+            inA->chat = t;
+          }
+        }
+      }
+      else if (match_str((const char*)ln, "^Debug") == 1)
+      {
+        char* jnk = processline(ln, '=');
+        if (jnk != NULL)
+        {
+          int t = -1;
+          sscanf(jnk, "%d", &t);
+          if (t > 0)
+          {
+            inA->debug = t;
+          }
+        }
+      }
+    }
+  }
+
+  int rv = 1;
+
+  // Some checks
+
+  if (!((match_str(inA->TLtype.c_str(), "^TAKO$") == 1)
+        || (match_str(inA->TLtype.c_str(), "^ASFLOWN$") == 1)
+        || (match_str(inA->TLtype.c_str(), "^SINGLE$") == 1)))
+  {
+    it--;
+  }
+
+  if (!((match_str(inA->EPHfunc.c_str(), "^yyyy_eph$") == 1)
+        || (match_str(inA->EPHfunc.c_str(), "^xyzll_eph$") == 1)
+        || (match_str(inA->EPHfunc.c_str(), "^tlederive$") == 1)))
+  {
+    it--;
+  }
+
+  if (it != itm)
+  {
+    rv = 0;
+  }
+
+  return rv;
+}
 
 char*
 processline(char* ln, char find)
@@ -79,7 +486,6 @@ processline(char* ln, char find)
 Attitude*
 makeAttTako(InitI* ini, EphemData* ephem)
 {
-  FILE* ITL;
   FILE* OutF = NULL;
   double Timespan, res;
   int inum, oinum, i;
@@ -105,15 +511,14 @@ makeAttTako(InitI* ini, EphemData* ephem)
 
   oinum = inum;
 
-  char ln[bufsz];
   double pra = ini->Ira;   // Initial spacecraft ra
   double pdec = ini->Idec; // Initial spacecraft dec
   double tl_start = 0.0;   // Timeline Start MJD
   double tl_end = 0.0;     // Timeline End MJD
   res = ini->Resolution;   // convert resolution in days for mjd
   int flg = 0; // Multipurpose flag (mostly used for errors).  Todo: Should
-               // split this flag variable into several single-task oriented
-               // flags. ~JA 20141008
+  // split this flag variable into several single-task oriented
+  // flags. ~JA 20141008
   double mjdt = 0.0;      // Profile Start MJD
   int mode = -1;          // Mode 1 = Survey, Mode 2 = Obs, Mode 3 = Profile
   double offset = -999.0; // Rocking angle offset
@@ -125,30 +530,10 @@ makeAttTako(InitI* ini, EphemData* ephem)
 
   double lastend = 0.0;
 
-  int yyy, doy, hh, mm, ss;
-  char lineBuf[bufsz];
-
-  // Loop to find the beginning of the first command in the timeline.  Use the
-  // timestamp for this command as the timeline start time.
-
-  while (fgets(ln, bufsz, ITL))
-  {
-    strcpy(lineBuf, ln);
-    if (match_str((const char*)ln, "Begin") == 1)
-    {
-      break;
-    }
-  }
-
-  char* LB = strtok(lineBuf, " ");
-  LB = strtok(NULL, " ");
-  sscanf(LB, "%d/%d:%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
-  tl_start = do_utcj2mjd(yyy, doy, hh, mm, ss);
-
-  LB = strtok(lineBuf, " ");
-  LB = strtok(NULL, " ");
-  sscanf(LB, "%d/%d:%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
-  tl_end = do_utcj2mjd(yyy, doy, hh, mm, ss);
+  tl_start =
+    getMJD(const_cast<char*>(ini->timeline.events[0].timestamp.c_str()));
+  tl_end =
+    getMJD(const_cast<char*>(ini->timeline.events[-1].timestamp.c_str()));
 
   if (ini->stop_MJD < tl_start)
     throw std::runtime_error(
@@ -162,8 +547,7 @@ makeAttTako(InitI* ini, EphemData* ephem)
       "\nERROR: Invalid Time Range. start_MJD occurs before ATS Timeline "
       "begins!");
   if (ini->stop_MJD > tl_end)
-  { // throw std::runtime_error("\nERROR: Invalid Time Range. stop_MJD occurs
-    // after ATS Timeline ends!");
+  {
     losf.warn(1) << "WARNING: stop_mjd=" << ini->stop_MJD
                  << " exceeds ATS Timeline End=" << tl_end
                  << ". Orbitsim will only run up to mjd=" << tl_end << "\n";
@@ -174,7 +558,7 @@ makeAttTako(InitI* ini, EphemData* ephem)
   for (int i = 0; i < ini->timeline.events.size(); ++i)
   {
 
-    client::timeline_event ev = ini->timeline.events[i];
+    timeline_event ev = ini->timeline.events[i];
 
     // Event is a Survey
     if (ev.event_name == "Survey" && ev.event_type == "Begin")
@@ -189,7 +573,7 @@ makeAttTako(InitI* ini, EphemData* ephem)
       for (int j = i + i; j < ini->timeline.events.size(); ++j)
       {
 
-        client::timeline_event future_ev = ini->timeline.events[j];
+        timeline_event future_ev = ini->timeline.events[j];
 
         if (future_ev.event_name == "Survey" && ev.event_type == "End")
         {
@@ -220,7 +604,7 @@ makeAttTako(InitI* ini, EphemData* ephem)
       for (int j = i + i; j < ini->timeline.events.size(); ++j)
       {
 
-        client::timeline_event future_ev = ini->timeline.events[j];
+        timeline_event future_ev = ini->timeline.events[j];
 
         if (future_ev.event_name == "Obs" && ev.event_type == "End")
         {
@@ -257,7 +641,7 @@ makeAttTako(InitI* ini, EphemData* ephem)
       for (int j = i + i; j < ini->timeline.events.size(); ++j)
       {
 
-        client::timeline_event future_ev = ini->timeline.events[j];
+        timeline_event future_ev = ini->timeline.events[j];
 
         if (future_ev.event_name == "Profile" && ev.event_type == "End")
         {
@@ -604,12 +988,12 @@ makeAttTako(InitI* ini, EphemData* ephem)
       }
 
       /*
-      printf( " %15.8f   %d/%03d:%02d:%02d:%02d  %10.6f  %10.6f  %10.6f  %10.6f
-      %10.6f  %10.6f  %10.6f  %10.6f\n", OAtt->mjd[i], yyy, doy, hh, mm, ss,
-      OAtt->SatRA[i], OAtt->SatDEC[i], OAtt->Xra[i], OAtt->Xdec[i],
-      OAtt->Yra[i], OAtt->Ydec[i], OAtt->Zra[i], OAtt->Zdec[i]);
+         printf( " %15.8f   %d/%03d:%02d:%02d:%02d  %10.6f  %10.6f  %10.6f
+         %10.6f %10.6f  %10.6f  %10.6f  %10.6f\n", OAtt->mjd[i], yyy, doy, hh,
+         mm, ss, OAtt->SatRA[i], OAtt->SatDEC[i], OAtt->Xra[i], OAtt->Xdec[i],
+         OAtt->Yra[i], OAtt->Ydec[i], OAtt->Zra[i], OAtt->Zdec[i]);
 
-    */
+*/
 
       if (i > 1)
       {
@@ -699,6 +1083,12 @@ makeAttTako(InitI* ini, EphemData* ephem)
 Attitude*
 makeAttAsFl(InitI* ini, EphemData* ephem)
 {
+
+  std::ofstream asflTestFile;
+  asflTestFile.open("ASFLAttitude.out");
+
+  FILE* ITL;
+  FILE* OutF = NULL;
   double Timespan, res;
   int inum, oinum, i;
 
@@ -755,365 +1145,504 @@ makeAttAsFl(InitI* ini, EphemData* ephem)
 
   char ln[bufsz];
 
-  double pra = ini->Ira;   // Initial spacecraft ra
-  double pdec = ini->Idec; // Initial spacecraft dec
-  res = ini->Resolution;   // Resolution already converted to days.
-  int mode = -1; // Used to distinguish between Survey (1) and Pointed (2)
-  int type =
-    -1; // Used to distinguish between simple Survey (1) and Profiled survey (2)
-  double offset = -999.0; // Rocking angle offset
-  double ra = -999.0;
-  double dec = -999.0;
-  double mjds = 0.0; // Used (in this function) to mark the start of a maneuver
-                     // (i.e. inertial point/zenith point)
-  double mjde =
-    0.0; // Used (in this function) to mark the current line being parsed
-  double val1, val2; // Used to hold ra and dec values for passage to functions
-                     // (not sure why these extra variables are needed.)  Todo:
-                     // Find out why they are needed.  ~JA 20141009
-  double lastTime = 0.0; // Used to store the timestamp of the previous line
-  bool zenithOpen = 0;   // Used to indicate whether a zenith point maneuver is
-                         // sill 'open' or not at the current parsed line
-  bool inertialOpen = 0; // Used to indicate whether an inertial point maneuver
-                         // is sill 'open' or not at the current parsed line
-
-  // Adding Time range checking of AFS schedule by parsing default Filename
-  std::string token = ini->timeline.filename.substr(
-    0, ini->timeline.filename.find("_")); // Find Filename Start. should be AFST
-  if (!strcmp(token.c_str(), "AFST"))
-    std::runtime_error("\nERROR: ASFLOWN mode with non-AFST timeline!\n");
-  std::string start_time = ini->timeline.filename.substr(
-    token.length() + 1, 11); // Find the start time string
-  std::string stop_time =
-    ini->timeline.filename.substr(token.length() + 1 + start_time.length() + 1,
-      11); // Find the end time string
-  int start_yr, start_day, start_hr, start_min;
-  sscanf(start_time.substr(0, 4).c_str(), "%d", &start_yr);
-  sscanf(start_time.substr(4, 3).c_str(), "%d", &start_day);
-  sscanf(start_time.substr(7, 2).c_str(), "%d", &start_hr);
-  sscanf(start_time.substr(9, 2).c_str(), "%d", &start_min);
-  double tl_start = do_utcj2mjd(start_yr, start_day, start_hr, start_min, 0);
-  int stop_yr, stop_day, stop_hr, stop_min;
-  sscanf(stop_time.substr(0, 4).c_str(), "%d", &stop_yr);
-  sscanf(stop_time.substr(4, 3).c_str(), "%d", &stop_day);
-  sscanf(stop_time.substr(7, 2).c_str(), "%d", &stop_hr);
-  sscanf(stop_time.substr(9, 2).c_str(), "%d", &stop_min);
-  double tl_end = do_utcj2mjd(stop_yr, stop_day, stop_hr, stop_min, 0);
-  if (ini->stop_MJD < tl_start)
-    throw std::runtime_error(
-      "\nERROR: Invalid Time Range. stop_MJD occurs before AFS Timeline "
-      "begins!");
-  if (ini->start_MJD > tl_end)
-    throw std::runtime_error(
-      "\nERROR: Invalid Time Range. start_MJD occurs after AFS Timeline ends!");
-  if (ini->start_MJD < tl_start)
-    throw std::runtime_error(
-      "\nERROR: Invalid Time Range. start_MJD occurs before AFS Timeline "
-      "begins!");
-  if (ini->stop_MJD > tl_end)
-  { // throw std::runtime_error("\nERROR: Invalid Time Range. stop_MJD occurs
-    // after AFS Timeline ends!");
-    losf.warn(1) << "WARNING: stop_mjd=" << ini->stop_MJD
-                 << " exceeds AFS Timeline End=" << tl_end
-                 << ". Orbitsim will only run up to mjd=" << tl_end << "\n";
-    ini->stop_MJD = tl_end;
-  }
-
-  SurProf profile;
-
-  std::string initTime; // Initial time of last command read in from the
-                        // previous satellite state information.  (In header of
-                        // ASFLOWN timeline.)
-  std::string initDEC; // Initial dec of the satellite read in from the previous
-                       // satellite state information.
-  std::string initRA;  // Initial ra of the satellite read in from the previous
-                       // satellite state information.
-  std::string initMode;    // Initial mode of the satellite read in from the
-                           // previous satellite state information.
-  std::string lastCommand; // Used to hold the previous command read in from the
-                           // profile.  This is needed in several maneuver
-                           // transition cases.
-
-  int flgprof = 0; // Flag used to denote whether or not a rocking profile has
-                   // been read into the program.
-  bool bufovrflg = 0; // Need to provide a flag to indicate when the string
-                      // buffer overflows, so that the check knows to skip the
-                      // following line iteration.  Note: This only works for 1
-                      // overflow.
-
-  while (fgets(ln, bufsz, ITL))
+  if ((ITL = fopen(ini->TLname.c_str(), "r")) == NULL)
   {
+    std::string fname(ini->TLname);
+    throw std::runtime_error("\nCound not open Timeline file " + fname);
+  }
+  else
+  {
+    double pra = ini->Ira;        // Initial spacecraft ra
+    double pdec = ini->Idec;      // Initial spacecraft dec
+    double res = ini->Resolution; // Resolution already converted to days.
+    int mode = -1; // Used to distinguish between Survey (1) and Pointed (2)
+    int type = -1; // Used to distinguish between simple Survey (1) and Profiled
+                   // survey (2)
+    double offset = -999.0; // Rocking angle offset
+    double ra = -999.0;
+    double dec = -999.0;
+    double mjds = 0.0; // Used (in this function) to mark the start of a
+                       // maneuver (i.e. inertial point/zenith point)
+    double mjde =
+      0.0; // Used (in this function) to mark the current line being parsed
+    double val1, val2;     // Used to hold ra and dec values for passage to
+                           // functions (not sure why these extra variables are
+                           // needed.)  Todo: Find out why they are needed.  ~JA
+                           // 20141009
+    double lastTime = 0.0; // Used to store the timestamp of the previous line
+    bool zenithOpen = 0; // Used to indicate whether a zenith point maneuver is
+                         // sill 'open' or not at the current parsed line
+    bool inertialOpen = 0; // Used to indicate whether an inertial point
+                           // maneuver is sill 'open' or not at the current
+                           // parsed line
 
-    //  If this is not a header line, set mjde to current time stamp
-    if (match_str((const char*)ln, "//") != 1)
-    {
-      char jnk[bufsz];
-      strcpy(jnk, ln);
-      char* TL = strtok(jnk, "|");
-      int yyy, doy, hh, mm, ss;
-      sscanf(TL, "%d-%d-%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
-      mjde = do_utcj2mjd(yyy, doy, hh, mm, ss);
+    // Adding Time range checking of AFS schedule by parsing default Filename
+    std::string token = ini->TLname.substr(
+      0, ini->TLname.find("_")); // Find Filename Start. should be AFST
+    if (!strcmp(token.c_str(), "AFST"))
+      std::runtime_error("\nERROR: ASFLOWN mode with non-AFST timeline!\n");
+    std::string start_time =
+      ini->TLname.substr(token.length() + 1, 11); // Find the start time string
+    std::string stop_time =
+      ini->TLname.substr(token.length() + 1 + start_time.length() + 1,
+        11); // Find the end time string
+    int start_yr, start_day, start_hr, start_min;
+    sscanf(start_time.substr(0, 4).c_str(), "%d", &start_yr);
+    sscanf(start_time.substr(4, 3).c_str(), "%d", &start_day);
+    sscanf(start_time.substr(7, 2).c_str(), "%d", &start_hr);
+    sscanf(start_time.substr(9, 2).c_str(), "%d", &start_min);
+    double tl_start = do_utcj2mjd(start_yr, start_day, start_hr, start_min, 0);
+    int stop_yr, stop_day, stop_hr, stop_min;
+    sscanf(stop_time.substr(0, 4).c_str(), "%d", &stop_yr);
+    sscanf(stop_time.substr(4, 3).c_str(), "%d", &stop_day);
+    sscanf(stop_time.substr(7, 2).c_str(), "%d", &stop_hr);
+    sscanf(stop_time.substr(9, 2).c_str(), "%d", &stop_min);
+    double tl_end = do_utcj2mjd(stop_yr, stop_day, stop_hr, stop_min, 0);
+    if (ini->stop_MJD < tl_start)
+      throw std::runtime_error(
+        "\nERROR: Invalid Time Range. stop_MJD occurs before AFS Timeline "
+        "begins!");
+    if (ini->start_MJD > tl_end)
+      throw std::runtime_error(
+        "\nERROR: Invalid Time Range. start_MJD occurs after AFS Timeline "
+        "ends!");
+    if (ini->start_MJD < tl_start)
+      throw std::runtime_error(
+        "\nERROR: Invalid Time Range. start_MJD occurs before AFS Timeline "
+        "begins!");
+    if (ini->stop_MJD > tl_end)
+    { // throw std::runtime_error("\nERROR: Invalid Time Range. stop_MJD occurs
+      // after AFS Timeline ends!");
+      losf.warn(1) << "WARNING: stop_mjd=" << ini->stop_MJD
+                   << " exceeds AFS Timeline End=" << tl_end
+                   << ". Orbitsim will only run up to mjd=" << tl_end << "\n";
+      ini->stop_MJD = tl_end;
     }
 
-    int flgT = 1;
+    SurProf profile;
 
-    // Parse the initial values provided by the header to set the initial
-    // satellite state
-    if (match_str((const char*)ln, "//DEC") == 1)
+    std::string initTime; // Initial time of last command read in from the
+                          // previous satellite state information.  (In header
+                          // of ASFLOWN timeline.)
+    std::string initDEC;  // Initial dec of the satellite read in from the
+                          // previous satellite state information.
+    std::string initRA; // Initial ra of the satellite read in from the previous
+                        // satellite state information.
+    std::string initMode;    // Initial mode of the satellite read in from the
+                             // previous satellite state information.
+    std::string lastCommand; // Used to hold the previous command read in from
+                             // the profile.  This is needed in several maneuver
+                             // transition cases.
+
+    int flgprof = 0; // Flag used to denote whether or not a rocking profile has
+                     // been read into the program.
+    bool bufovrflg = 0; // Need to provide a flag to indicate when the string
+                        // buffer overflows, so that the check knows to skip the
+                        // following line iteration.  Note: This only works for
+                        // 1 overflow.
+
+    while (fgets(ln, bufsz, ITL))
     {
-      char jnk[bufsz];
-      strcpy(jnk, ln);
-      char* TL = strtok(jnk, "=\n");
-      TL = strtok(NULL, "=");
-      initDEC = TL;
-      initDEC.erase(
-        std::remove(initDEC.begin(), initDEC.end(), '\n'), initDEC.end());
-    }
 
-    if (match_str((const char*)ln, "//RA") == 1)
-    {
-      char jnk[bufsz];
-      strcpy(jnk, ln);
-      char* TL = strtok(jnk, "=\n");
-      TL = strtok(NULL, "=");
-      initRA = TL;
-      initRA.erase(
-        std::remove(initRA.begin(), initRA.end(), '\n'), initRA.end());
-    }
-
-    if (match_str((const char*)ln, "//SAC_MODE=") == 1)
-    {
-      char jnk[bufsz];
-      strcpy(jnk, ln);
-      char* TL = strtok(jnk, "=\n");
-      TL = strtok(NULL, "=");
-      initMode = TL;
-      initMode.erase(
-        std::remove(initMode.begin(), initMode.end(), '\n'), initMode.end());
-    }
-
-    if (match_str((const char*)ln, "//SS_Param") == 1)
-    {
-      parseInitParams(ln, &profile);
-      flgprof = 1;
-    }
-
-    // Load the last header input and concatenate it into a line describing the
-    // state
-    if (match_str((const char*)ln, "//TIME") == 1)
-    {
-      char jnk[bufsz];
-      strcpy(jnk, ln);
-      char* TL = strtok(jnk, "=\n");
-      TL = strtok(NULL, "=");
-      initTime = TL;
-      initTime.erase(
-        std::remove(initTime.begin(), initTime.end(), '\n'), initTime.end());
-      memset(ln, '0', 650);
-
-      std::string lineManeuver = " | Maneuver | ";
-      std::string linePipe = " | ";
-      std::string lineEndPipe = " |\n";
-
-      std::string initSchedule = initTime.c_str() + lineManeuver
-        + initMode.c_str() + linePipe + initRA.c_str() + linePipe
-        + initDEC.c_str() + lineEndPipe;
-      strcpy(ln, initSchedule.c_str());
-      int yyy, doy, hh, mm, ss;
-      sscanf(initTime.c_str(), "%d-%d-%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
-      mjds = do_utcj2mjd(yyy, doy, hh, mm, ss);
-    }
-
-    // Check to see if the satellite is goint INTO a maneuver.  This triggers a
-    // pointing calculation. Otherwise, check to see if the parsed line is
-    // providing a rocking profile.
-    if (checkManeuver((const char*)ln) == 1)
-    {
-      mjde = parseAsFline(ln, &mode, &val1, &val2);
-      printf("%s ===> Starting obs with mjde=%f, RA=%f, DEC=%f\n",
-        ln,
-        mjde,
-        val1,
-        val2);
-    }
-    else if ((match_str((const char*)ln, "SS_Param") == 1)
-      && (match_str((const char*)ln, "//") != 1))
-    {
-      parseProfile(ln, &profile);
-      flgprof = 1;
-    }
-
-    // Check to see if the satellite is going into a zenith or inertial point.
-    if ((checkManZenith((const char*)ln) == 1)
-      || (checkManInertial((const char*)ln) == 1))
-    {
-      char jnk[bufsz];
-      strcpy(jnk, ln);
-      char* TL = strtok(jnk, "|");
-      int yyy, doy, hh, mm, ss;
-      sscanf(TL, "%d-%d-%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
-      mjds = do_utcj2mjd(yyy, doy, hh, mm, ss);
-      if ((checkManZenith((const char*)ln) == 1))
-      {
-        zenithOpen = 1;
-      }
-      else if (checkManInertial((const char*)ln) == 1)
+      //  If this is not a header line, set mjde to current time stamp
+      if (match_str((const char*)ln, "//") != 1)
       {
         char jnk[bufsz];
-        strcpy(jnk, lastCommand.c_str());
+        strcpy(jnk, ln);
         char* TL = strtok(jnk, "|");
         int yyy, doy, hh, mm, ss;
         sscanf(TL, "%d-%d-%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
-        lastTime = do_utcj2mjd(yyy, doy, hh, mm, ss);
-        TL = strtok(NULL, "|");
-        if (match_str((const char*)TL, "SS_Param") == 1)
-        {
-          mjds = lastTime;
-        }
-        inertialOpen = 1;
+        mjde = do_utcj2mjd(yyy, doy, hh, mm, ss);
       }
-    }
 
-    // Check to see if the satellite is going into a zenith point without a
-    // survey profile defined.
-    if ((checkManZenith((const char*)ln) == 1) && (flgprof == 0))
-    {
-      losf.warn()
-        << "\n##########################################################\n\n";
-      losf.warn()
-        << "\t\tWARNING\n\tNO SURVEY PROFILE DEFINED!\n   Could not calculate "
-           "attitude between:\n       "
-        << mjds << " and " << mjde << "\n"
-        << "\n##########################################################\n\n";
-      flgT = -1;
-    }
-    else if ((match_str((const char*)ln, "//") != 1) && bufovrflg != 1)
-    {
+      int flgT = 1;
 
-      // Define survey type
-      if ((profile.epoch <= mjds) && (zenithOpen == 1))
+      // Parse the initial values provided by the header to set the initial
+      // satellite state
+      if (match_str((const char*)ln, "//DEC") == 1)
       {
-        type = 2;
+        char jnk[bufsz];
+        strcpy(jnk, ln);
+        char* TL = strtok(jnk, "=\n");
+        TL = strtok(NULL, "=");
+        initDEC = TL;
+        initDEC.erase(
+          std::remove(initDEC.begin(), initDEC.end(), '\n'), initDEC.end());
+      }
+
+      if (match_str((const char*)ln, "//RA") == 1)
+      {
+        char jnk[bufsz];
+        strcpy(jnk, ln);
+        char* TL = strtok(jnk, "=\n");
+        TL = strtok(NULL, "=");
+        initRA = TL;
+        initRA.erase(
+          std::remove(initRA.begin(), initRA.end(), '\n'), initRA.end());
+      }
+
+      if (match_str((const char*)ln, "//SAC_MODE=") == 1)
+      {
+        char jnk[bufsz];
+        strcpy(jnk, ln);
+        char* TL = strtok(jnk, "=\n");
+        TL = strtok(NULL, "=");
+        initMode = TL;
+        initMode.erase(
+          std::remove(initMode.begin(), initMode.end(), '\n'), initMode.end());
+      }
+
+      if (match_str((const char*)ln, "//SS_Param") == 1)
+      {
+        parseInitParams(ln, &profile);
+        flgprof = 1;
+      }
+
+      // Load the last header input and concatenate it into a line describing
+      // the state
+      if (match_str((const char*)ln, "//TIME") == 1)
+      {
+        char jnk[bufsz];
+        strcpy(jnk, ln);
+        char* TL = strtok(jnk, "=\n");
+        TL = strtok(NULL, "=");
+        initTime = TL;
+        initTime.erase(
+          std::remove(initTime.begin(), initTime.end(), '\n'), initTime.end());
+        memset(ln, '0', 650);
+
+        std::string lineManeuver = " | Maneuver | ";
+        std::string linePipe = " | ";
+        std::string lineEndPipe = " |\n";
+
+        std::string initSchedule = initTime.c_str() + lineManeuver
+          + initMode.c_str() + linePipe + initRA.c_str() + linePipe
+          + initDEC.c_str() + lineEndPipe;
+        strcpy(ln, initSchedule.c_str());
+        int yyy, doy, hh, mm, ss;
+        sscanf(initTime.c_str(), "%d-%d-%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
+        mjds = do_utcj2mjd(yyy, doy, hh, mm, ss);
+      }
+
+      // Check to see if the satellite is goint INTO a maneuver.  This triggers
+      // a pointing calculation. Otherwise, check to see if the parsed line is
+      // providing a rocking profile.
+      if (checkManeuver((const char*)ln) == 1)
+      {
+        mjde = parseAsFline(ln, &mode, &val1, &val2);
+        printf("%s ===> Starting obs with mjde=%f, RA=%f, DEC=%f\n",
+          ln,
+          mjde,
+          val1,
+          val2);
+      }
+      else if ((match_str((const char*)ln, "SS_Param") == 1)
+        && (match_str((const char*)ln, "//") != 1))
+      {
+        parseProfile(ln, &profile);
+        flgprof = 1;
+      }
+
+      // Check to see if the satellite is going into a zenith or inertial point.
+      if ((checkManZenith((const char*)ln) == 1)
+        || (checkManInertial((const char*)ln) == 1))
+      {
+        char jnk[bufsz];
+        strcpy(jnk, ln);
+        char* TL = strtok(jnk, "|");
+        int yyy, doy, hh, mm, ss;
+        sscanf(TL, "%d-%d-%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
+        mjds = do_utcj2mjd(yyy, doy, hh, mm, ss);
+        if ((checkManZenith((const char*)ln) == 1))
+        {
+          zenithOpen = 1;
+        }
+        else if (checkManInertial((const char*)ln) == 1)
+        {
+          char jnk[bufsz];
+          strcpy(jnk, lastCommand.c_str());
+          char* TL = strtok(jnk, "|");
+          int yyy, doy, hh, mm, ss;
+          sscanf(TL, "%d-%d-%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
+          lastTime = do_utcj2mjd(yyy, doy, hh, mm, ss);
+          TL = strtok(NULL, "|");
+          if (match_str((const char*)TL, "SS_Param") == 1)
+          {
+            mjds = lastTime;
+          }
+          inertialOpen = 1;
+        }
+      }
+
+      // Check to see if the satellite is going into a zenith point without a
+      // survey profile defined.
+      if ((checkManZenith((const char*)ln) == 1) && (flgprof == 0))
+      {
+        losf.warn()
+          << "\n##########################################################\n\n";
+        losf.warn()
+          << "\t\tWARNING\n\tNO SURVEY PROFILE DEFINED!\n   Could not "
+             "calculate attitude between:\n       "
+          << mjds << " and " << mjde << "\n"
+          << "\n##########################################################\n\n";
+        flgT = -1;
+      }
+      else if ((match_str((const char*)ln, "//") != 1) && bufovrflg != 1)
+      {
+
+        // Define survey type
+        if ((profile.epoch <= mjds) && (zenithOpen == 1))
+        {
+          type = 2;
+        }
+        else
+        {
+          type = 1;
+          offset = profile.defofst;
+        }
+      }
+
+      //  Begin reallocations of the attitude structure to ensure it is sized to
+      //  the time-of-interest window Heavy lifting calculations are in this if
+      //  block as well (namely makeatt2 and makeprofiled)
+      if ((match_str((const char*)ln, "//") != 1) && bufovrflg != 1)
+      {
+        if (mjds > 0 && mjds < mjde)
+        {
+
+          if (org_stT >= mjds && org_enT > mjde)
+          {
+
+            ini->start_MJD = mjds;
+            ephem = deallocateEphem(ephem);
+            FILE* ephF = fopen(ini->EPHname.c_str(), "r");
+
+            if (match_str(ini->EPHfunc.c_str(), "^yyyy_eph$") == 1)
+            {
+              ephem = yyyy_eph(ephF,
+                ini->start_MJD,
+                ini->stop_MJD,
+                ini->Units,
+                ini->Resolution);
+            }
+            else if (match_str(ini->EPHfunc.c_str(), "^xyzll_eph$") == 1)
+            {
+              ephem = xyzll_eph(ephF,
+                ini->start_MJD,
+                ini->stop_MJD,
+                ini->Units,
+                ini->Resolution);
+            }
+            else if (match_str(ini->EPHfunc.c_str(), "^tlederive$") == 1)
+            {
+              ephem = tlederive(ephF,
+                ini->start_MJD,
+                ini->stop_MJD,
+                ini->Units,
+                ini->Resolution);
+            }
+
+            fclose(ephF);
+
+            Timespan = (ini->stop_MJD - ini->start_MJD);
+            res = ini->Resolution;
+            inum = (int)((Timespan + res / 2.0) / res);
+            inum++;
+            OAtt = reallocateAttitude(inum, OAtt);
+
+            if (OAtt == (Attitude*)NULL)
+            {
+              throw std::runtime_error(
+                "ERROR: Cannot Allocate attitude data "
+                "structure\nExiting..............\n\n");
+            }
+          }
+          else if (mjds < org_enT && mjde >= org_enT)
+          {
+
+            ini->stop_MJD = mjde;
+            Timespan = (ini->stop_MJD - ini->start_MJD);
+            res = ini->Resolution;
+            inum = (int)((Timespan + res / 2.0) / res);
+            inum++;
+
+            ephem = deallocateEphem(ephem);
+            FILE* ephF = fopen(ini->EPHname.c_str(), "r");
+
+            if (match_str(ini->EPHfunc.c_str(), "^yyyy_eph$") == 1)
+            {
+              ephem = yyyy_eph(ephF,
+                ini->start_MJD,
+                ini->stop_MJD,
+                ini->Units,
+                ini->Resolution);
+            }
+            else if (match_str(ini->EPHfunc.c_str(), "^xyzll_eph$") == 1)
+            {
+              ephem = xyzll_eph(ephF,
+                ini->start_MJD,
+                ini->stop_MJD,
+                ini->Units,
+                ini->Resolution);
+            }
+            else if (match_str(ini->EPHfunc.c_str(), "^tlederive$") == 1)
+            {
+              ephem = tlederive(ephF,
+                ini->start_MJD,
+                ini->stop_MJD,
+                ini->Units,
+                ini->Resolution);
+            }
+
+            fclose(ephF);
+
+            OAtt = reallocateAttitude(inum, OAtt);
+
+            if (OAtt == (Attitude*)NULL)
+            {
+              throw std::runtime_error(
+                "ERROR: Cannot Allocate attitude data "
+                "structure\nExiting..............\n\n");
+            }
+          }
+          else if (mjds >= org_enT)
+          {
+            break;
+          }
+          else if (mjde < org_stT)
+          {
+            flgT = -1;
+          }
+
+          if (flgT == 1)
+          {
+            if ((mode == 2) || (mode == 1 && type == 1))
+            {
+              double lpos[2];
+              if (mode == 2)
+              {
+                ra = val1;
+                dec = val2;
+                offset = profile.defofst;
+              }
+              else if (mode == 1)
+              {
+                ra = 0.0;
+                dec = 0.0;
+                offset = profile.defofst;
+              }
+
+              MakeAtt2(mjds,
+                mjde,
+                pra,
+                pdec,
+                offset,
+                ra,
+                dec,
+                mode,
+                ini->Resolution,
+                ephem,
+                lpos,
+                OAtt,
+                ini->start_MJD);
+
+              pra = lpos[0];
+              pdec = lpos[1];
+              mode = 0;
+              type = 0;
+              inertialOpen = 0;
+            }
+            else if ((mode == 1) && (type == 2))
+            {
+
+              MakeProfiled(mjds,
+                mjde,
+                ini->Resolution,
+                pra,
+                pdec,
+                profile.epoch,
+                profile.times,
+                profile.ofsts,
+                ephem,
+                OAtt,
+                ini->start_MJD);
+
+              //    printf("Called MakeProfiled\n");
+              int idx = (int)(((mjde - ini->start_MJD) + ini->Resolution / 0.5)
+                / ini->Resolution);
+              pra = OAtt->Zra[idx];
+              pdec = OAtt->Zdec[idx];
+              mode = 0;
+              type = 0;
+              zenithOpen = 0;
+            }
+          }
+
+          if (mjds >= org_enT)
+          {
+            losf.warn(1) << "Observation at " << mjde
+                         << " is outside the limits\n";
+            break;
+          }
+        }
+      } // End of "if((match_str((const char*) ln,"//") != 1) && bufovrflg !=
+        // 1)" Block
+      if (match_str((const char*)ln, "\n") != 1)
+      {
+        bufovrflg = 1;
+      }
+      else if (org_enT <= mjde)
+      {
+        // In the event we have passed the end of the time-of-interest, check to
+        // see if a profile is open, and if it is, finish the profile
+        // calculation and break.
+        mjde = parseAsFline(ln, &mode, &val1, &val2);
+        printf("%s ===> Starting obs with mjde=%f, RA=%f, DEC=%f\n",
+          ln,
+          mjde,
+          val1,
+          val2);
+        lastCommand = ln;
+        bufovrflg = 0;
+        memset(ln, '0', bufsz);
+        losf.warn(4) << "Clearing parsed line buffer" << ini->OptFile << "\n";
       }
       else
       {
-        type = 1;
-        offset = profile.defofst;
+        lastCommand = ln;
+        bufovrflg = 0;
+        memset(ln, '0', bufsz);
+        losf.warn(4) << "Clearing parsed line buffer" << ini->OptFile << "\n";
       }
-    }
-
-    //  Begin reallocations of the attitude structure to ensure it is sized to
-    //  the time-of-interest window Heavy lifting calculations are in this if
-    //  block as well (namely makeatt2 and makeprofiled)
-    if ((match_str((const char*)ln, "//") != 1) && bufovrflg != 1)
-    {
-      if (mjds > 0 && mjds < mjde)
+      if (org_enT <= mjde)
       {
-
-        if (org_stT >= mjds && org_enT > mjde)
+        if ((zenithOpen == 1) || (inertialOpen == 1))
         {
-
-          ini->start_MJD = mjds;
-          ephem = deallocateEphem(ephem);
-          FILE* ephF = fopen(ini->EPHname.c_str(), "r");
-
-          if (match_str(ini->EPHfunc.c_str(), "^yyyy_eph$") == 1)
+          offset = profile.defofst;
+          if (zenithOpen == 1)
           {
-            ephem = yyyy_eph(
-              ephF, ini->start_MJD, ini->stop_MJD, ini->Units, ini->Resolution);
+            mode = 1;
+            ra = 0;
+            dec = 0;
+            MakeProfiled(mjds,
+              mjde,
+              ini->Resolution,
+              pra,
+              pdec,
+              profile.epoch,
+              profile.times,
+              profile.ofsts,
+              ephem,
+              OAtt,
+              ini->start_MJD);
+            zenithOpen = 0;
           }
-          else if (match_str(ini->EPHfunc.c_str(), "^xyzll_eph$") == 1)
+          else if (inertialOpen == 1)
           {
-            ephem = xyzll_eph(
-              ephF, ini->start_MJD, ini->stop_MJD, ini->Units, ini->Resolution);
-          }
-          else if (match_str(ini->EPHfunc.c_str(), "^tlederive$") == 1)
-          {
-            ephem = tlederive(
-              ephF, ini->start_MJD, ini->stop_MJD, ini->Units, ini->Resolution);
-          }
-
-          fclose(ephF);
-
-          Timespan = (ini->stop_MJD - ini->start_MJD);
-          res = ini->Resolution;
-          inum = (int)((Timespan + res / 2.0) / res);
-          inum++;
-          OAtt = reallocateAttitude(inum, OAtt);
-
-          if (OAtt == (Attitude*)NULL)
-          {
-            throw std::runtime_error(
-              "ERROR: Cannot Allocate attitude data "
-              "structure\nExiting..............\n\n");
-          }
-        }
-        else if (mjds < org_enT && mjde >= org_enT)
-        {
-
-          ini->stop_MJD = mjde;
-          Timespan = (ini->stop_MJD - ini->start_MJD);
-          res = ini->Resolution;
-          inum = (int)((Timespan + res / 2.0) / res);
-          inum++;
-
-          ephem = deallocateEphem(ephem);
-          FILE* ephF = fopen(ini->EPHname.c_str(), "r");
-
-          if (match_str(ini->EPHfunc.c_str(), "^yyyy_eph$") == 1)
-          {
-            ephem = yyyy_eph(
-              ephF, ini->start_MJD, ini->stop_MJD, ini->Units, ini->Resolution);
-          }
-          else if (match_str(ini->EPHfunc.c_str(), "^xyzll_eph$") == 1)
-          {
-            ephem = xyzll_eph(
-              ephF, ini->start_MJD, ini->stop_MJD, ini->Units, ini->Resolution);
-          }
-          else if (match_str(ini->EPHfunc.c_str(), "^tlederive$") == 1)
-          {
-            ephem = tlederive(
-              ephF, ini->start_MJD, ini->stop_MJD, ini->Units, ini->Resolution);
-          }
-
-          fclose(ephF);
-
-          OAtt = reallocateAttitude(inum, OAtt);
-
-          if (OAtt == (Attitude*)NULL)
-          {
-            throw std::runtime_error(
-              "ERROR: Cannot Allocate attitude data "
-              "structure\nExiting..............\n\n");
-          }
-        }
-        else if (mjds >= org_enT)
-        {
-          break;
-        }
-        else if (mjde < org_stT)
-        {
-          flgT = -1;
-        }
-
-        if (flgT == 1)
-        {
-          if ((mode == 2) || (mode == 1 && type == 1))
-          {
+            mode = 2;
+            ra = val1;
+            dec = val2;
             double lpos[2];
-            if (mode == 2)
-            {
-              ra = val1;
-              dec = val2;
-              offset = profile.defofst;
-            }
-            else if (mode == 1)
-            {
-              ra = 0.0;
-              dec = 0.0;
-              offset = profile.defofst;
-            }
-
             MakeAtt2(mjds,
               mjde,
               pra,
@@ -1127,121 +1656,11 @@ makeAttAsFl(InitI* ini, EphemData* ephem)
               lpos,
               OAtt,
               ini->start_MJD);
-
-            pra = lpos[0];
-            pdec = lpos[1];
-            mode = 0;
-            type = 0;
             inertialOpen = 0;
           }
-          else if ((mode == 1) && (type == 2))
-          {
-
-            MakeProfiled(mjds,
-              mjde,
-              ini->Resolution,
-              pra,
-              pdec,
-              profile.epoch,
-              profile.times,
-              profile.ofsts,
-              ephem,
-              OAtt,
-              ini->start_MJD);
-
-            //    printf("Called MakeProfiled\n");
-            int idx = (int)(((mjde - ini->start_MJD) + ini->Resolution / 0.5)
-              / ini->Resolution);
-            pra = OAtt->Zra[idx];
-            pdec = OAtt->Zdec[idx];
-            mode = 0;
-            type = 0;
-            zenithOpen = 0;
-          }
         }
-
-        if (mjds >= org_enT)
-        {
-          losf.warn(1) << "Observation at " << mjde
-                       << " is outside the limits\n";
-          break;
-        }
+        break;
       }
-    } // End of "if((match_str((const char*) ln,"//") != 1) && bufovrflg != 1)"
-      // Block
-    if (match_str((const char*)ln, "\n") != 1)
-    {
-      bufovrflg = 1;
-    }
-    else if (org_enT <= mjde)
-    {
-      // In the event we have passed the end of the time-of-interest, check to
-      // see if a profile is open, and if it is, finish the profile calculation
-      // and break.
-      mjde = parseAsFline(ln, &mode, &val1, &val2);
-      printf("%s ===> Starting obs with mjde=%f, RA=%f, DEC=%f\n",
-        ln,
-        mjde,
-        val1,
-        val2);
-      lastCommand = ln;
-      bufovrflg = 0;
-      memset(ln, '0', bufsz);
-      losf.warn(4) << "Clearing parsed line buffer" << ini->OptFile << "\n";
-    }
-    else
-    {
-      lastCommand = ln;
-      bufovrflg = 0;
-      memset(ln, '0', bufsz);
-      losf.warn(4) << "Clearing parsed line buffer" << ini->OptFile << "\n";
-    }
-    if (org_enT <= mjde)
-    {
-      if ((zenithOpen == 1) || (inertialOpen == 1))
-      {
-        offset = profile.defofst;
-        if (zenithOpen == 1)
-        {
-          mode = 1;
-          ra = 0;
-          dec = 0;
-          MakeProfiled(mjds,
-            mjde,
-            ini->Resolution,
-            pra,
-            pdec,
-            profile.epoch,
-            profile.times,
-            profile.ofsts,
-            ephem,
-            OAtt,
-            ini->start_MJD);
-          zenithOpen = 0;
-        }
-        else if (inertialOpen == 1)
-        {
-          mode = 2;
-          ra = val1;
-          dec = val2;
-          double lpos[2];
-          MakeAtt2(mjds,
-            mjde,
-            pra,
-            pdec,
-            offset,
-            ra,
-            dec,
-            mode,
-            ini->Resolution,
-            ephem,
-            lpos,
-            OAtt,
-            ini->start_MJD);
-          inertialOpen = 0;
-        }
-      }
-      break;
     }
   }
 
@@ -1377,6 +1796,20 @@ makeAttAsFl(InitI* ini, EphemData* ephem)
             "ERROR: Something is wrong in OrbSim::makeAttAsFl. since tried to "
             "access array element beyond limits\n\n");
         }
+        // For testing, all of this needs to be output to a file for
+        // compairison. Begin Regression Testing portion: Output values below:
+        asflTestFile << "MJD = " << OAtt->mjd[k] << " , ";
+        asflTestFile << "SatRA = " << OAtt->SatRA[k] << " , ";
+        asflTestFile << "SatDEC = " << OAtt->SatDEC[k] << " , ";
+        asflTestFile << "Xra = " << OAtt->Xra[k] << " , ";
+        asflTestFile << "Xdec = " << OAtt->Xdec[k] << " , ";
+        asflTestFile << "Yra = " << OAtt->Yra[k] << " , ";
+        asflTestFile << "Ydec = " << OAtt->Ydec[k] << " , ";
+        asflTestFile << "Zra = " << OAtt->Zra[k] << " , ";
+        asflTestFile << "Zdec = " << OAtt->Zdec[k] << " , ";
+        asflTestFile << "SatRA = " << OAtt->SatRA[k] << " , ";
+        asflTestFile << "RockAngle = " << OAtt->rockAngle[k] << "\n";
+        // End Regression Testing portion.
 
         RAtt->mjd[k] = OAtt->mjd[i];
         RAtt->X[k] = ephem->X[i];
@@ -1402,6 +1835,7 @@ makeAttAsFl(InitI* ini, EphemData* ephem)
     }
   }
 
+  asflTestFile.close();
 
   if (RAtt->mjd[(RAtt->mjd.size() - 1)] == 0)
   {
@@ -1486,9 +1920,10 @@ doCmd(InitI* ini, EphemData* ephem)
 
   // Identify which command mode (SURVEY, PROFILE, or OBS) is being issued and
   // act appropriately.
-  if (match_str((const char*)ini->timeline.filename.c_str(), "SURVEY") == 1)
+  if (match_str((const char*)ini->timeline.header.filename.c_str(), "SURVEY")
+    == 1)
   {
-    std::string jnk = ini->timeline.filename;
+    std::string jnk = ini->timeline.header.filename;
     char* TL = strtok((char*)jnk.c_str(), "|");
     TL = strtok(NULL, "|");
     double offset;
@@ -1588,9 +2023,9 @@ doCmd(InitI* ini, EphemData* ephem)
       //        ini->Ira, ini->Idec, offset, ephem, OAtt);
     }
   }
-  else if (match_str(ini->timeline.filename.c_str(), "PROFILED") == 1)
+  else if (match_str(ini->timeline.header.filename.c_str(), "PROFILED") == 1)
   {
-    std::string jnk = ini->timeline.filename;
+    std::string jnk = ini->timeline.header.filename;
     char* TL = strtok((char*)jnk.c_str(), "|");
     TL = strtok(NULL, "|");
     double epoch;
@@ -1729,10 +2164,10 @@ doCmd(InitI* ini, EphemData* ephem)
       OAtt,
       ini->start_MJD);
   }
-  else if (match_str(ini->timeline.filename.c_str(), "POINTED") == 1)
+  else if (match_str(ini->timeline.header.filename.c_str(), "POINTED") == 1)
   {
 
-    std::string jnk = ini->timeline.filename;
+    std::string jnk = ini->timeline.header.filename;
     char* TL = strtok((char*)jnk.c_str(), "|");
     TL = strtok(NULL, "|");
     double ra, dec, offset;
@@ -1803,7 +2238,7 @@ doCmd(InitI* ini, EphemData* ephem)
     std::ostringstream eBuf;
     eBuf << "\n"
          << __FILE__ << ":" << __LINE__ << " ERROR: doCmd SINGLE command "
-         << ini->timeline.filename
+         << ini->timeline.header.filename
          << " is unknown!\nExiting now........................\n\n"
          << std::ends;
 
