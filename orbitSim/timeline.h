@@ -27,6 +27,8 @@
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
+#include <boost/spirit/include/phoenix_stl.hpp>
+#include <boost/spirit/include/phoenix_fusion.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_object.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
@@ -39,6 +41,7 @@
 #include <vector>
 
   namespace qi = boost::spirit::qi;
+  namespace phoenix = boost::phoenix;
   namespace ascii = boost::spirit::ascii;
 
   struct rockprofile_pair
@@ -61,9 +64,7 @@
     std::string target_name;
     double offset;
     double RA;
-    double dupRA;
     double DEC;
-    double dupDEC;
     std::string PI;
     std::string comment;
     int week;
@@ -71,6 +72,8 @@
     double duration;
     int slew;
     int saa;
+    double dupRA;
+    double dupDEC;
     rocking_profile profile;
   };
 
@@ -154,18 +157,18 @@ BOOST_FUSION_ADAPT_STRUCT(
     opt_evt_fields,
     (std::string, prop_ID)
     (std::string, target_name)
-    (std::string, PI)
-    (std::string, comment)
     (double, offset)
     (double, RA)
-    (double, dupRA)
     (double, DEC)
-    (double, dupDEC)
+    (std::string, PI)
+    (std::string, comment)
     (int, week)
     (int, SSN)
     (double, duration)
     (int, slew)
     (int, saa)
+    (double, dupRA)
+    (double, dupDEC)
     (rocking_profile, profile)
     )
 
@@ -251,6 +254,9 @@ BOOST_FUSION_ADAPT_STRUCT(
       using ascii::string;
       using qi::alnum;
       using qi::blank;
+      using boost::spirit::qi::_1;
+      using boost::spirit::qi::_val;
+      using boost::phoenix::at_c;
 
 
       file_path %=
@@ -297,28 +303,28 @@ BOOST_FUSION_ADAPT_STRUCT(
         ;
 
 
-      opt_evt_fields %=
-        (lit("//") >> lit("prop_ID") >> "=" >> +digit)
-        ^ (lit("//") >> lit("target_name") >> "=" >> one_liner)
-        ^ (lit("//") >> lit("PI") >> "=" >> one_liner)
-        ^ (lit("//") >> lit("comment") >> "=" >> one_liner)
-        ^ (lit("//") >> lit("offset") >> "=" >> qi::double_ >> lit("deg"))
-        ^ (lit("//") >> lit("week") >> "=" >> qi::int_)
-        ^ (lit("//") >> lit("SSN") >> "=" >> qi::int_)
-        ^ (lit("//") >> lit("duration") >> "=" >> qi::double_ >> lit("ksec"))
-        ^ (lit("//") >> lit("slew") >> "=" >> qi::int_ >> lit("sec"))
-        ^ (lit("//") >> lit("saa") >> "=" >> qi::int_ >> lit("sec"))
+      opt_evt_fields =
+        (lit("//") >> lit("prop_ID") >> "=" >> one_liner) [at_c<0>(_val) = _1]
+        ^ (lit("//") >> lit("target_name") >> "=" >> one_liner) [at_c<1>(_val) = _1]
+        ^ (lit("//") >> lit("offset") >> "=" >> qi::double_ >> lit("deg")) [at_c<2>(_val) = _1]
+        ^ RA    [at_c<3>(_val) = _1]
+        ^ DEC   [at_c<4>(_val) = _1]
+        ^ (lit("//") >> lit("PI") >> "=" >> one_liner) [at_c<5>(_val) = _1]
+        ^ (lit("//") >> lit("comment") >> "=" >> one_liner[at_c<6>(_val) = _1])
+        ^ (lit("//") >> lit("week") >> "=" >> qi::int_[at_c<7>(_val) = _1])
+        ^ (lit("//") >> lit("SSN") >> "=" >> qi::int_[at_c<8>(_val) = _1])
+        ^ (lit("//") >> lit("duration") >> "=" >> qi::double_[at_c<9>(_val) = _1] >> lit("ksec"))
+        ^ (lit("//") >> lit("slew") >> "=" >> qi::int_[at_c<10>(_val) = _1] >> lit("sec"))
+        ^ (lit("//") >> lit("saa") >> "=" >> qi::int_[at_c<11>(_val) = _1] >> lit("sec"))
 
         // Why are these duplicated?
         // The standard allows events optional fields to hold two RA and DEC
         // values. While they must be equivalent, they are both maintained for
         // some reason in Tako Timelines. So For ease I've just crated additional
         // fields to hold them, the dupRA and dupDEC fields.
-        ^ RA
-        ^ RA
-        ^ DEC
-        ^ DEC
-        ^ rocking_profile
+        ^ RA[at_c<12>(_val) = _1]
+        ^ DEC[at_c<13>(_val) = _1]
+        ^ rocking_profile[at_c<14>(_val) = _1]
         ;
 
 
@@ -394,10 +400,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 
       ignored %= divider | command | generic_comment;
 
-      timeline %= *ignored
-        >> -header >> *ignored
-        >> -initial >> *ignored
-        >> *(event | ignored) >> *ignored
+      timeline = *ignored
+        >> -header [at_c<0>(_val) = _1]
+        >> *ignored
+        >> -initial [at_c<1>(_val) = _1]
+        >> *ignored
+        >> *(event [phoenix::push_back(at_c<2>(_val), _1)]
+            | ignored) >> *ignored
         >> qi::eoi
         ;
     }

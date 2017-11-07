@@ -14,6 +14,8 @@
 #include "orbitSim/orbitSimStruct.h"
 #include "orbitSim/DynamicStruct.h"
 
+#include <string>
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -489,6 +491,16 @@ int chkStr(char *str);
    * @date Created:  Nov 15, 2005
    */
 double getMJD(char *ln);
+
+
+
+  /**
+   * @brief Function that extracts the MJD value from a timestamp string
+   *
+   * @author Alex Reustle
+   * @date Created:  Nov 6th, 2017
+   */
+double timestamp2mjd(std::string stamp);
 
 
 

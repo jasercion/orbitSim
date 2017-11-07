@@ -27,6 +27,8 @@
 #include "st_stream/StreamFormatter.h"
 #include "st_stream/st_stream.h"
 
+using std::cout;
+using std::endl;
 /// Stream to control output through verbosity level
 st_stream::StreamFormatter losf("OrbSim", "", 2);
 
@@ -497,6 +499,7 @@ makeAttTako(InitI* ini, EphemData* ephem)
   losf.err().precision(15);
   losf.info().precision(15);
 
+  cout << "a" << endl;
   Timespan = (ini->stop_MJD - ini->start_MJD);
   res = ini->Resolution;
   inum = (int)((Timespan + res / 2.0) / res);
@@ -510,6 +513,7 @@ makeAttTako(InitI* ini, EphemData* ephem)
   }
 
   oinum = inum;
+
 
   double pra = ini->Ira;   // Initial spacecraft ra
   double pdec = ini->Idec; // Initial spacecraft dec
@@ -530,18 +534,26 @@ makeAttTako(InitI* ini, EphemData* ephem)
 
   double lastend = 0.0;
 
-  tl_start =
-    getMJD(const_cast<char*>(ini->timeline.events[0].timestamp.c_str()));
-  tl_end =
-    getMJD(const_cast<char*>(ini->timeline.events[-1].timestamp.c_str()));
+  cout << "b" <<endl;
+  cout << ini->timeline.events.back().timestamp << endl;
+  tl_start = timestamp2mjd(ini->timeline.events[0].timestamp.c_str());
+  tl_end = timestamp2mjd(ini->timeline.events.back().timestamp.c_str());
+  cout << "c" <<endl;
 
-  if (ini->stop_MJD < tl_start)
+  if (ini->stop_MJD < tl_start){
+    cout << "ini " << ini->stop_MJD << "  " << tl_start << "  " <<
+      ini->timeline.events[0].timestamp << endl;
     throw std::runtime_error(
       "\nERROR: Invalid Time Range. stop_MJD occurs before ATS Timeline "
       "begins!");
+    }
   if (ini->start_MJD > tl_end)
+  {
+    cout << "ini " << ini->start_MJD << "  " << tl_end << "  " <<
+      ini->timeline.events.back().timestamp << endl;
     throw std::runtime_error(
       "\nERROR: Invalid Time Range. start_MJD occurs after ATS Timeline ends!");
+  }
   if (ini->start_MJD < tl_start)
     throw std::runtime_error(
       "\nERROR: Invalid Time Range. start_MJD occurs before ATS Timeline "
@@ -555,6 +567,7 @@ makeAttTako(InitI* ini, EphemData* ephem)
   }
 
   // Loop until a command keyword is identified and act accordingly.
+  cout << "d" <<endl;
   for (int i = 0; i < ini->timeline.events.size(); ++i)
   {
 
@@ -563,10 +576,11 @@ makeAttTako(InitI* ini, EphemData* ephem)
     // Event is a Survey
     if (ev.event_name == "Survey" && ev.event_type == "Begin")
     {
+      cout << "Survey Begin" << endl;
 
       // set modes and the start time (mjdt) and offset
       mode = 1;
-      mjdt = getMJD(const_cast<char*>(ev.timestamp.c_str()));
+      mjdt = timestamp2mjd(ev.timestamp.c_str());
       offset = ev.additional.offset;
 
       // Loop over remaining events to set endtime (mjde) and slew time (mjds)
@@ -577,14 +591,13 @@ makeAttTako(InitI* ini, EphemData* ephem)
 
         if (future_ev.event_name == "Survey" && ev.event_type == "End")
         {
-          mjde = getMJD(const_cast<char*>(
-            future_ev.timestamp.c_str())); /* Found the end of this survey */
+          mjde = timestamp2mjd( future_ev.timestamp.c_str());
+          /* Found the end of this survey */
           break;
         }
 
         if (future_ev.event_name == "Slew" && ev.event_type == "End")
-          mjds = getMJD(
-            const_cast<char*>(future_ev.timestamp.c_str())); /*  and continue */
+          mjds = timestamp2mjd(future_ev.timestamp.c_str()); /*  and continue */
       }
 
       if (mjds == 0.)
@@ -595,10 +608,12 @@ makeAttTako(InitI* ini, EphemData* ephem)
     else if (ev.event_name == "Obs" && ev.event_type == "Begin")
     {
 
+      cout << "Obs Begin" << endl;
       mode = 2;
-      mjdt = getMJD(const_cast<char*>(ev.timestamp.c_str()));
+      mjdt = timestamp2mjd(ev.timestamp.c_str());
       ra = ev.additional.RA;
-      ra = ev.additional.DEC;
+      dec = ev.additional.DEC;
+      cout << mjdt << " " << ra << " " << dec << endl;
 
       // Loop over remaining events to set endtime (mjde) and slew time (mjds)
       for (int j = i + i; j < ini->timeline.events.size(); ++j)
@@ -608,14 +623,12 @@ makeAttTako(InitI* ini, EphemData* ephem)
 
         if (future_ev.event_name == "Obs" && ev.event_type == "End")
         {
-          mjde = getMJD(const_cast<char*>(
-            future_ev.timestamp.c_str())); /* Found the end of this survey */
+          mjde = timestamp2mjd(future_ev.timestamp.c_str()); /* Found the end of this survey */
           break;
         }
 
         if (future_ev.event_name == "Slew" && ev.event_type == "End")
-          mjds = getMJD(
-            const_cast<char*>(future_ev.timestamp.c_str())); /*  and continue */
+          mjds = timestamp2mjd(future_ev.timestamp.c_str()); /*  and continue */
       }
 
       if (mjds == 0.)
@@ -626,8 +639,9 @@ makeAttTako(InitI* ini, EphemData* ephem)
     else if (ev.event_name == "Profile" && ev.event_type == "Begin")
     {
 
+      cout << "Profile Begin" << endl;
       mode = 2;
-      mjdt = getMJD(const_cast<char*>(ev.timestamp.c_str()));
+      mjdt = timestamp2mjd(ev.timestamp.c_str());
       profile.epoch = do_met2mjd(ev.additional.profile.rockstart_met);
       profile.defofst = do_met2mjd(ev.additional.profile.rockdefault);
 
@@ -645,14 +659,12 @@ makeAttTako(InitI* ini, EphemData* ephem)
 
         if (future_ev.event_name == "Profile" && ev.event_type == "End")
         {
-          mjde = getMJD(const_cast<char*>(
-            future_ev.timestamp.c_str())); /* Found the end of this survey */
+          mjde = timestamp2mjd(future_ev.timestamp.c_str()); /* Found the end of this survey */
           break;
         }
 
         if (future_ev.event_name == "Slew" && ev.event_type == "End")
-          mjds = getMJD(
-            const_cast<char*>(future_ev.timestamp.c_str())); /*  and continue */
+          mjds = timestamp2mjd(future_ev.timestamp.c_str()); /*  and continue */
       }
 
       if (mjds == 0.)

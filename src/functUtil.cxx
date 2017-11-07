@@ -254,6 +254,22 @@ getMJD(char* ln)
   return mjdt;
 }
 
+double
+timestamp2mjd(std::string stamp)
+{
+
+  // Assume timestamp is of the form YYYY/DDD:HH:MM:SS
+
+  int yyy, doy, hh, mm, ss = -1;
+
+  sscanf(stamp.c_str(), "%d/%d:%d:%d:%d", &yyy, &doy, &hh, &mm, &ss);
+
+  double mjdt = do_utcj2mjd(yyy, doy, hh, mm, ss);
+
+  return mjdt;
+
+}
+
 /*
  * Match string against the extended regular expression in
  * pattern, treating errors as no match.
