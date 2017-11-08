@@ -499,7 +499,6 @@ makeAttTako(InitI* ini, EphemData* ephem)
   losf.err().precision(15);
   losf.info().precision(15);
 
-  cout << "a" << endl;
   Timespan = (ini->stop_MJD - ini->start_MJD);
   res = ini->Resolution;
   inum = (int)((Timespan + res / 2.0) / res);
@@ -513,7 +512,6 @@ makeAttTako(InitI* ini, EphemData* ephem)
   }
 
   oinum = inum;
-
 
   double pra = ini->Ira;   // Initial spacecraft ra
   double pdec = ini->Idec; // Initial spacecraft dec
@@ -534,23 +532,17 @@ makeAttTako(InitI* ini, EphemData* ephem)
 
   double lastend = 0.0;
 
-  cout << "b" <<endl;
-  cout << ini->timeline.events.back().timestamp << endl;
   tl_start = timestamp2mjd(ini->timeline.events[0].timestamp.c_str());
   tl_end = timestamp2mjd(ini->timeline.events.back().timestamp.c_str());
-  cout << "c" <<endl;
 
-  if (ini->stop_MJD < tl_start){
-    cout << "ini " << ini->stop_MJD << "  " << tl_start << "  " <<
-      ini->timeline.events[0].timestamp << endl;
+  if (ini->stop_MJD < tl_start)
+  {
     throw std::runtime_error(
       "\nERROR: Invalid Time Range. stop_MJD occurs before ATS Timeline "
       "begins!");
-    }
+  }
   if (ini->start_MJD > tl_end)
   {
-    cout << "ini " << ini->start_MJD << "  " << tl_end << "  " <<
-      ini->timeline.events.back().timestamp << endl;
     throw std::runtime_error(
       "\nERROR: Invalid Time Range. start_MJD occurs after ATS Timeline ends!");
   }
@@ -567,81 +559,18 @@ makeAttTako(InitI* ini, EphemData* ephem)
   }
 
   // Loop until a command keyword is identified and act accordingly.
-  cout << "d" <<endl;
   for (int i = 0; i < ini->timeline.events.size(); ++i)
   {
 
     timeline_event ev = ini->timeline.events[i];
 
     // Event is a Survey
-    if (ev.event_name == "Survey" && ev.event_type == "Begin")
+    if (ev.event_type == "Begin")
     {
-      cout << "Survey Begin" << endl;
-
-      // set modes and the start time (mjdt) and offset
-      mode = 1;
       mjdt = timestamp2mjd(ev.timestamp.c_str());
       offset = ev.additional.offset;
-
-      // Loop over remaining events to set endtime (mjde) and slew time (mjds)
-      for (int j = i + i; j < ini->timeline.events.size(); ++j)
-      {
-
-        timeline_event future_ev = ini->timeline.events[j];
-
-        if (future_ev.event_name == "Survey" && ev.event_type == "End")
-        {
-          mjde = timestamp2mjd( future_ev.timestamp.c_str());
-          /* Found the end of this survey */
-          break;
-        }
-
-        if (future_ev.event_name == "Slew" && ev.event_type == "End")
-          mjds = timestamp2mjd(future_ev.timestamp.c_str()); /*  and continue */
-      }
-
-      if (mjds == 0.)
-        mjds = mjdt;
-    }
-
-    // Event is an Obs
-    else if (ev.event_name == "Obs" && ev.event_type == "Begin")
-    {
-
-      cout << "Obs Begin" << endl;
-      mode = 2;
-      mjdt = timestamp2mjd(ev.timestamp.c_str());
       ra = ev.additional.RA;
       dec = ev.additional.DEC;
-      cout << mjdt << " " << ra << " " << dec << endl;
-
-      // Loop over remaining events to set endtime (mjde) and slew time (mjds)
-      for (int j = i + i; j < ini->timeline.events.size(); ++j)
-      {
-
-        timeline_event future_ev = ini->timeline.events[j];
-
-        if (future_ev.event_name == "Obs" && ev.event_type == "End")
-        {
-          mjde = timestamp2mjd(future_ev.timestamp.c_str()); /* Found the end of this survey */
-          break;
-        }
-
-        if (future_ev.event_name == "Slew" && ev.event_type == "End")
-          mjds = timestamp2mjd(future_ev.timestamp.c_str()); /*  and continue */
-      }
-
-      if (mjds == 0.)
-        mjds = mjdt;
-    }
-
-    // Event is a Profile
-    else if (ev.event_name == "Profile" && ev.event_type == "Begin")
-    {
-
-      cout << "Profile Begin" << endl;
-      mode = 2;
-      mjdt = timestamp2mjd(ev.timestamp.c_str());
       profile.epoch = do_met2mjd(ev.additional.profile.rockstart_met);
       profile.defofst = do_met2mjd(ev.additional.profile.rockdefault);
 
@@ -651,25 +580,38 @@ makeAttTako(InitI* ini, EphemData* ephem)
         profile.ofsts[j] = ev.additional.profile.pairs[j].rockangle;
       }
 
+      if (ev.event_name == "Survey")
+        mode = 1;
+      if (ev.event_name == "Obs")
+        mode = 2;
+      if (ev.event_name == "Profile")
+        mode = 3;
+
       // Loop over remaining events to set endtime (mjde) and slew time (mjds)
-      for (int j = i + i; j < ini->timeline.events.size(); ++j)
+      for (int j = i + 1; j < ini->timeline.events.size(); ++j)
       {
 
         timeline_event future_ev = ini->timeline.events[j];
 
-        if (future_ev.event_name == "Profile" && ev.event_type == "End")
+        if (future_ev.event_name == ev.event_name
+          && future_ev.event_type == "End")
         {
-          mjde = timestamp2mjd(future_ev.timestamp.c_str()); /* Found the end of this survey */
+          mjde = timestamp2mjd(future_ev.timestamp.c_str());
+          /* Found the end of this survey */
           break;
         }
 
-        if (future_ev.event_name == "Slew" && ev.event_type == "End")
+        if (future_ev.event_name == "Slew" && future_ev.event_type == "End")
           mjds = timestamp2mjd(future_ev.timestamp.c_str()); /*  and continue */
       }
 
       if (mjds == 0.)
         mjds = mjdt;
     }
+
+    // Event isn't a Begin so skip it.
+    else
+      continue;
 
     /*-----------------------------------------------------------------------------
      *  Parser sanity checks
