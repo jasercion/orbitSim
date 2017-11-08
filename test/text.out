@@ -1,0 +1,704 @@
+This is gtorbsim version ST_DEV
+Input Type is: file
+Parsing Input File
+Earth Avoidance Angle: 20 degrees
+A
+B
+C
+D
+a
+b
+2017/320:00:00:00
+c
+d
+Obs Begin
+58066 304.11304 44.22707
+			ERROR:
+Event starting at MJD 58066
+DOES NOT have a proper offset (-999)
+
+			ERROR:
+Event starting at MJD 58066
+will end at an earlier time 0
+
+			ERROR:
+Event starting at MJD 58066
+ends at 0, but the end slew is at 58066
+
+			ERROR:
+Event starting at MJD 58066
+DOES NOT have a proper offset (-999)
+
+			ERROR:
+Event starting at MJD 58066
+will end at an earlier time 0
+
+			ERROR:
+Event starting at MJD 58066
+ends at 0, but the end slew is at 58066
+
+Profile Begin
+			ERROR:
+Event starting at MJD 58066.0069444445
+DOES NOT have a proper offset (-999)
+
+			ERROR:
+Event starting at MJD 58066.0069444445
+will end at an earlier time 0
+
+			ERROR:
+Event starting at MJD 58066.0069444445
+ends at 0, but the end slew is at 58066
+
+			ERROR:
+Event starting at MJD 58066.0069444445
+DOES NOT have a proper offset (-999)
+
+			ERROR:
+Event starting at MJD 58066.0069444445
+will end at an earlier time 0
+
+			ERROR:
+Event starting at MJD 58066.0069444445
+ends at 0, but the end slew is at 58066
+
+Target occulted at ephem index, 0, from 58066 to 58066.0055555556
+Target occulted at ephem index, 58, from 58066.0402777779 to 58066.0722222225
+Target occulted at ephem index, 153, from 58066.1062500003 to 58066.1381944449
+Target occulted at ephem index, 248, from 58066.1722222228 to 58066.2041666673
+Target occulted at ephem index, 343, from 58066.2381944452 to 58066.2701388898
+Target occulted at ephem index, 438, from 58066.3041666677 to 58066.3361111122
+Target occulted at ephem index, 534, from 58066.3708333345 to 58066.4027777791
+Target occulted at ephem index, 629, from 58066.436805557 to 58066.4687500015
+Target occulted at ephem index, 724, from 58066.5027777794 to 58066.534722224
+Target occulted at ephem index, 819, from 58066.5687500019 to 58066.6006944464
+Target occulted at ephem index, 915, from 58066.6354166687 to 58066.6673611133
+Target occulted at ephem index, 1010, from 58066.7013888912 to 58066.7333333357
+Target occulted at ephem index, 1105, from 58066.7673611136 to 58066.7993055582
+Target occulted at ephem index, 1200, from 58066.833333336 to 58066.8652777806
+Target occulted at ephem index, 1296, from 58066.9000000029 to 58066.9319444475
+Target occulted at ephem index, 1391, from 58066.9659722254 to 58066.9979166699
+Target occulted at ephem index, 1486, from 58067.0319444478 to 58067.0638888924
+Target occulted at ephem index, 1581, from 58067.0979166702 to 58067.1298611148
+Target occulted at ephem index, 1676, from 58067.1638888927 to 58067.1958333372
+Target occulted at ephem index, 1772, from 58067.2305555596 to 58067.2625000041
+Target occulted at ephem index, 1867, from 58067.296527782 to 58067.3284722266
+Target occulted at ephem index, 1962, from 58067.3625000044 to 58067.394444449
+Target occulted at ephem index, 2057, from 58067.4284722269 to 58067.4604166714
+Target occulted at ephem index, 2153, from 58067.4951388938 to 58067.5270833383
+Target occulted at ephem index, 2248, from 58067.5611111162 to 58067.5930555607
+Target occulted at ephem index, 2343, from 58067.6270833386 to 58067.6590277832
+Target occulted at ephem index, 2438, from 58067.6930555611 to 58067.7250000056
+Target occulted at ephem index, 2533, from 58067.7590277835 to 58067.7916666725
+Target occulted at ephem index, 2629, from 58067.8256944504 to 58067.8576388949
+Target occulted at ephem index, 2724, from 58067.8916666728 to 58067.9236111174
+Target occulted at ephem index, 2819, from 58067.9576388953 to 58067.9895833398
+Target occulted at ephem index, 2914, from 58068.0236111177 to 58068.0555555623
+Target occulted at ephem index, 3010, from 58068.0902777846 to 58068.1222222291
+Target occulted at ephem index, 3105, from 58068.156250007 to 58068.1881944516
+Target occulted at ephem index, 3200, from 58068.2222222295 to 58068.254166674
+Target occulted at ephem index, 3295, from 58068.2881944519 to 58068.3201388965
+Target occulted at ephem index, 3391, from 58068.3548611188 to 58068.3868055633
+Target occulted at ephem index, 3486, from 58068.4208333412 to 58068.4527777858
+Target occulted at ephem index, 3581, from 58068.4868055637 to 58068.5187500082
+Target occulted at ephem index, 3676, from 58068.5527777861 to 58068.5847222306
+Target occulted at ephem index, 3771, from 58068.6187500085 to 58068.6513888975
+Target occulted at ephem index, 3867, from 58068.6854166754 to 58068.71736112
+Target occulted at ephem index, 3962, from 58068.7513888979 to 58068.7833333424
+Target occulted at ephem index, 4057, from 58068.8173611203 to 58068.8493055648
+Target occulted at ephem index, 4152, from 58068.8833333427 to 58068.9152777873
+Target occulted at ephem index, 4248, from 58068.9500000096 to 58068.9819444542
+Target occulted at ephem index, 4343, from 58069.0159722321 to 58069.0479166766
+Target occulted at ephem index, 4438, from 58069.0819444545 to 58069.113888899
+Target occulted at ephem index, 4533, from 58069.1479166769 to 58069.1798611215
+Target occulted at ephem index, 4629, from 58069.2145833438 to 58069.2465277884
+Target occulted at ephem index, 4724, from 58069.2805555662 to 58069.3125000108
+Target occulted at ephem index, 4819, from 58069.3465277887 to 58069.3784722332
+Target occulted at ephem index, 4914, from 58069.4125000111 to 58069.4444444557
+Target occulted at ephem index, 5009, from 58069.4784722336 to 58069.5111111226
+Target occulted at ephem index, 5105, from 58069.5451389004 to 58069.577083345
+Target occulted at ephem index, 5200, from 58069.6111111229 to 58069.6430555674
+Target occulted at ephem index, 5295, from 58069.6770833453 to 58069.7090277899
+Target occulted at ephem index, 5390, from 58069.7430555678 to 58069.7750000123
+Target occulted at ephem index, 5486, from 58069.8097222346 to 58069.8416666792
+Target occulted at ephem index, 5581, from 58069.8756944571 to 58069.9076389016
+Target occulted at ephem index, 5676, from 58069.9416666795 to 58069.9736111241
+Target occulted at ephem index, 5771, from 58070.007638902 to 58070.0395833465
+Target occulted at ephem index, 5866, from 58070.0736111244 to 58070.1062500134
+Target occulted at ephem index, 5962, from 58070.1402777913 to 58070.1722222358
+Target occulted at ephem index, 6057, from 58070.2062500137 to 58070.2381944583
+Target occulted at ephem index, 6152, from 58070.2722222361 to 58070.3041666807
+Target occulted at ephem index, 6247, from 58070.3381944586 to 58070.3701389031
+Target occulted at ephem index, 6343, from 58070.4048611255 to 58070.43680557
+Target occulted at ephem index, 6438, from 58070.4708333479 to 58070.5027777925
+Target occulted at ephem index, 6533, from 58070.5368055703 to 58070.5687500149
+Target occulted at ephem index, 6628, from 58070.6027777928 to 58070.6347222373
+Target occulted at ephem index, 6724, from 58070.6694444597 to 58070.7013889042
+Target occulted at ephem index, 6819, from 58070.7354166821 to 58070.7673611267
+Target occulted at ephem index, 6914, from 58070.8013889045 to 58070.8333333491
+Target occulted at ephem index, 7009, from 58070.867361127 to 58070.8993055715
+Target occulted at ephem index, 7104, from 58070.9333333494 to 58070.9659722384
+Target occulted at ephem index, 7200, from 58071.0000000163 to 58071.0319444608
+Target occulted at ephem index, 7295, from 58071.0659722387 to 58071.0979166833
+Target occulted at ephem index, 7390, from 58071.1319444612 to 58071.1638889057
+Target occulted at ephem index, 7485, from 58071.1979166836 to 58071.2298611282
+Target occulted at ephem index, 7581, from 58071.2645833505 to 58071.296527795
+Target occulted at ephem index, 7676, from 58071.3305555729 to 58071.3625000175
+Target occulted at ephem index, 7771, from 58071.3965277954 to 58071.4284722399
+Target occulted at ephem index, 7866, from 58071.4625000178 to 58071.4944444624
+Target occulted at ephem index, 7961, from 58071.5284722402 to 58071.5611111292
+Target occulted at ephem index, 8057, from 58071.5951389071 to 58071.6270833517
+Target occulted at ephem index, 8152, from 58071.6611111296 to 58071.6930555741
+Target occulted at ephem index, 8247, from 58071.727083352 to 58071.7590277966
+Target occulted at ephem index, 8342, from 58071.7930555744 to 58071.825000019
+Target occulted at ephem index, 8438, from 58071.8597222413 to 58071.8916666859
+Target occulted at ephem index, 8533, from 58071.9256944638 to 58071.9576389083
+Target occulted at ephem index, 8628, from 58071.9916666862 to 58072.0236111307
+Target occulted at ephem index, 8723, from 58072.0576389086 to 58072.0895833532
+Target occulted at ephem index, 8818, from 58072.1236111311 to 58072.1562500201
+Target occulted at ephem index, 8914, from 58072.190277798 to 58072.2222222425
+Target occulted at ephem index, 9009, from 58072.2562500204 to 58072.2881944649
+Target occulted at ephem index, 9104, from 58072.3222222428 to 58072.3541666874
+Target occulted at ephem index, 9199, from 58072.3881944653 to 58072.4201389098
+Target occulted at ephem index, 9295, from 58072.4548611322 to 58072.4868055767
+Target occulted at ephem index, 9390, from 58072.5208333546 to 58072.5527777991
+Target occulted at ephem index, 9485, from 58072.586805577 to 58072.6187500216
+Target occulted at ephem index, 9580, from 58072.6527777995 to 58072.684722244
+Target occulted at ephem index, 9675, from 58072.7187500219 to 58072.7513889109
+Target occulted at ephem index, 9771, from 58072.7854166888 to 58072.8173611333
+Target occulted at ephem index, 9866, from 58072.8513889112 to 58072.8833333558
+Target occulted at ephem index, 9961, from 58072.9173611337 to 58072.9493055782
+Target occulted at ephem index, 10056, from 58072.9833333561 to 58073.0000000228
+Something is wrong in makeAttTako:
+   i=56 mjd=0
+  i=57 mjd=58066.0395833335 ===> 83615097.0000002 minutes difference
+Something is wrong in makeAttTako:
+   i=151 mjd=0
+  i=152 mjd=58066.1055555559 ===> 83615192.0000005 minutes difference
+Something is wrong in makeAttTako:
+   i=246 mjd=0
+  i=247 mjd=58066.1715277783 ===> 83615287.0000008 minutes difference
+Something is wrong in makeAttTako:
+   i=341 mjd=0
+  i=342 mjd=58066.2375000008 ===> 83615382.0000011 minutes difference
+Something is wrong in makeAttTako:
+   i=436 mjd=0
+  i=437 mjd=58066.3034722232 ===> 83615477.0000014 minutes difference
+Something is wrong in makeAttTako:
+   i=532 mjd=0
+  i=533 mjd=58066.3701388901 ===> 83615573.0000017 minutes difference
+Something is wrong in makeAttTako:
+   i=627 mjd=0
+  i=628 mjd=58066.4361111125 ===> 83615668.000002 minutes difference
+Something is wrong in makeAttTako:
+   i=722 mjd=0
+  i=723 mjd=58066.502083335 ===> 83615763.0000024 minutes difference
+Something is wrong in makeAttTako:
+   i=817 mjd=0
+  i=818 mjd=58066.5680555574 ===> 83615858.0000027 minutes difference
+Something is wrong in makeAttTako:
+   i=913 mjd=0
+  i=914 mjd=58066.6347222243 ===> 83615954.000003 minutes difference
+Something is wrong in makeAttTako:
+   i=1008 mjd=0
+  i=1009 mjd=58066.7006944467 ===> 83616049.0000033 minutes difference
+Something is wrong in makeAttTako:
+   i=1103 mjd=0
+  i=1104 mjd=58066.7666666692 ===> 83616144.0000036 minutes difference
+Something is wrong in makeAttTako:
+   i=1198 mjd=0
+  i=1199 mjd=58066.8326388916 ===> 83616239.0000039 minutes difference
+Something is wrong in makeAttTako:
+   i=1294 mjd=0
+  i=1295 mjd=58066.8993055585 ===> 83616335.0000042 minutes difference
+Something is wrong in makeAttTako:
+   i=1389 mjd=0
+  i=1390 mjd=58066.9652777809 ===> 83616430.0000045 minutes difference
+Something is wrong in makeAttTako:
+   i=1484 mjd=0
+  i=1485 mjd=58067.0312500034 ===> 83616525.0000048 minutes difference
+Something is wrong in makeAttTako:
+   i=1579 mjd=0
+  i=1580 mjd=58067.0972222258 ===> 83616620.0000052 minutes difference
+Something is wrong in makeAttTako:
+   i=1674 mjd=0
+  i=1675 mjd=58067.1631944482 ===> 83616715.0000055 minutes difference
+Something is wrong in makeAttTako:
+   i=1770 mjd=0
+  i=1771 mjd=58067.2298611151 ===> 83616811.0000058 minutes difference
+Something is wrong in makeAttTako:
+   i=1865 mjd=0
+  i=1866 mjd=58067.2958333376 ===> 83616906.0000061 minutes difference
+Something is wrong in makeAttTako:
+   i=1960 mjd=0
+  i=1961 mjd=58067.36180556 ===> 83617001.0000064 minutes difference
+Something is wrong in makeAttTako:
+   i=2055 mjd=0
+  i=2056 mjd=58067.4277777824 ===> 83617096.0000067 minutes difference
+Something is wrong in makeAttTako:
+   i=2151 mjd=0
+  i=2152 mjd=58067.4944444493 ===> 83617192.000007 minutes difference
+Something is wrong in makeAttTako:
+   i=2246 mjd=0
+  i=2247 mjd=58067.5604166718 ===> 83617287.0000073 minutes difference
+Something is wrong in makeAttTako:
+   i=2341 mjd=0
+  i=2342 mjd=58067.6263888942 ===> 83617382.0000076 minutes difference
+Something is wrong in makeAttTako:
+   i=2436 mjd=0
+  i=2437 mjd=58067.6923611166 ===> 83617477.0000079 minutes difference
+Something is wrong in makeAttTako:
+   i=2531 mjd=0
+  i=2532 mjd=58067.7583333391 ===> 83617572.0000083 minutes difference
+Something is wrong in makeAttTako:
+   i=2627 mjd=0
+  i=2628 mjd=58067.8250000059 ===> 83617668.0000086 minutes difference
+Something is wrong in makeAttTako:
+   i=2722 mjd=0
+  i=2723 mjd=58067.8909722284 ===> 83617763.0000089 minutes difference
+Something is wrong in makeAttTako:
+   i=2817 mjd=0
+  i=2818 mjd=58067.9569444508 ===> 83617858.0000092 minutes difference
+Something is wrong in makeAttTako:
+   i=2912 mjd=0
+  i=2913 mjd=58068.0229166733 ===> 83617953.0000095 minutes difference
+Something is wrong in makeAttTako:
+   i=3008 mjd=0
+  i=3009 mjd=58068.0895833401 ===> 83618049.0000098 minutes difference
+Something is wrong in makeAttTako:
+   i=3103 mjd=0
+  i=3104 mjd=58068.1555555626 ===> 83618144.0000101 minutes difference
+Something is wrong in makeAttTako:
+   i=3198 mjd=0
+  i=3199 mjd=58068.221527785 ===> 83618239.0000104 minutes difference
+Something is wrong in makeAttTako:
+   i=3293 mjd=0
+  i=3294 mjd=58068.2875000075 ===> 83618334.0000107 minutes difference
+Something is wrong in makeAttTako:
+   i=3389 mjd=0
+  i=3390 mjd=58068.3541666743 ===> 83618430.0000111 minutes difference
+Something is wrong in makeAttTako:
+   i=3484 mjd=0
+  i=3485 mjd=58068.4201388968 ===> 83618525.0000114 minutes difference
+Something is wrong in makeAttTako:
+   i=3579 mjd=0
+  i=3580 mjd=58068.4861111192 ===> 83618620.0000117 minutes difference
+Something is wrong in makeAttTako:
+   i=3674 mjd=0
+  i=3675 mjd=58068.5520833417 ===> 83618715.000012 minutes difference
+Something is wrong in makeAttTako:
+   i=3769 mjd=0
+  i=3770 mjd=58068.6180555641 ===> 83618810.0000123 minutes difference
+Something is wrong in makeAttTako:
+   i=3865 mjd=0
+  i=3866 mjd=58068.684722231 ===> 83618906.0000126 minutes difference
+Something is wrong in makeAttTako:
+   i=3960 mjd=0
+  i=3961 mjd=58068.7506944534 ===> 83619001.0000129 minutes difference
+Something is wrong in makeAttTako:
+   i=4055 mjd=0
+  i=4056 mjd=58068.8166666758 ===> 83619096.0000132 minutes difference
+Something is wrong in makeAttTako:
+   i=4150 mjd=0
+  i=4151 mjd=58068.8826388983 ===> 83619191.0000135 minutes difference
+Something is wrong in makeAttTako:
+   i=4246 mjd=0
+  i=4247 mjd=58068.9493055652 ===> 83619287.0000138 minutes difference
+Something is wrong in makeAttTako:
+   i=4341 mjd=0
+  i=4342 mjd=58069.0152777876 ===> 83619382.0000142 minutes difference
+Something is wrong in makeAttTako:
+   i=4436 mjd=0
+  i=4437 mjd=58069.08125001 ===> 83619477.0000145 minutes difference
+Something is wrong in makeAttTako:
+   i=4531 mjd=0
+  i=4532 mjd=58069.1472222325 ===> 83619572.0000148 minutes difference
+Something is wrong in makeAttTako:
+   i=4627 mjd=0
+  i=4628 mjd=58069.2138888994 ===> 83619668.0000151 minutes difference
+Something is wrong in makeAttTako:
+   i=4722 mjd=0
+  i=4723 mjd=58069.2798611218 ===> 83619763.0000154 minutes difference
+Something is wrong in makeAttTako:
+   i=4817 mjd=0
+  i=4818 mjd=58069.3458333442 ===> 83619858.0000157 minutes difference
+Something is wrong in makeAttTako:
+   i=4912 mjd=0
+  i=4913 mjd=58069.4118055667 ===> 83619953.000016 minutes difference
+Something is wrong in makeAttTako:
+   i=5007 mjd=0
+  i=5008 mjd=58069.4777777891 ===> 83620048.0000163 minutes difference
+Something is wrong in makeAttTako:
+   i=5103 mjd=0
+  i=5104 mjd=58069.544444456 ===> 83620144.0000166 minutes difference
+Something is wrong in makeAttTako:
+   i=5198 mjd=0
+  i=5199 mjd=58069.6104166784 ===> 83620239.0000169 minutes difference
+Something is wrong in makeAttTako:
+   i=5293 mjd=0
+  i=5294 mjd=58069.6763889009 ===> 83620334.0000173 minutes difference
+Something is wrong in makeAttTako:
+   i=5388 mjd=0
+  i=5389 mjd=58069.7423611233 ===> 83620429.0000176 minutes difference
+Something is wrong in makeAttTako:
+   i=5484 mjd=0
+  i=5485 mjd=58069.8090277902 ===> 83620525.0000179 minutes difference
+Something is wrong in makeAttTako:
+   i=5579 mjd=0
+  i=5580 mjd=58069.8750000126 ===> 83620620.0000182 minutes difference
+Something is wrong in makeAttTako:
+   i=5674 mjd=0
+  i=5675 mjd=58069.9409722351 ===> 83620715.0000185 minutes difference
+Something is wrong in makeAttTako:
+   i=5769 mjd=0
+  i=5770 mjd=58070.0069444575 ===> 83620810.0000188 minutes difference
+Something is wrong in makeAttTako:
+   i=5864 mjd=0
+  i=5865 mjd=58070.0729166799 ===> 83620905.0000191 minutes difference
+Something is wrong in makeAttTako:
+   i=5960 mjd=0
+  i=5961 mjd=58070.1395833468 ===> 83621001.0000194 minutes difference
+Something is wrong in makeAttTako:
+   i=6055 mjd=0
+  i=6056 mjd=58070.2055555693 ===> 83621096.0000197 minutes difference
+Something is wrong in makeAttTako:
+   i=6150 mjd=0
+  i=6151 mjd=58070.2715277917 ===> 83621191.0000201 minutes difference
+Something is wrong in makeAttTako:
+   i=6245 mjd=0
+  i=6246 mjd=58070.3375000141 ===> 83621286.0000204 minutes difference
+Something is wrong in makeAttTako:
+   i=6341 mjd=0
+  i=6342 mjd=58070.404166681 ===> 83621382.0000207 minutes difference
+Something is wrong in makeAttTako:
+   i=6436 mjd=0
+  i=6437 mjd=58070.4701389035 ===> 83621477.000021 minutes difference
+Something is wrong in makeAttTako:
+   i=6531 mjd=0
+  i=6532 mjd=58070.5361111259 ===> 83621572.0000213 minutes difference
+Something is wrong in makeAttTako:
+   i=6626 mjd=0
+  i=6627 mjd=58070.6020833483 ===> 83621667.0000216 minutes difference
+Something is wrong in makeAttTako:
+   i=6722 mjd=0
+  i=6723 mjd=58070.6687500152 ===> 83621763.0000219 minutes difference
+Something is wrong in makeAttTako:
+   i=6817 mjd=0
+  i=6818 mjd=58070.7347222377 ===> 83621858.0000222 minutes difference
+Something is wrong in makeAttTako:
+   i=6912 mjd=0
+  i=6913 mjd=58070.8006944601 ===> 83621953.0000225 minutes difference
+Something is wrong in makeAttTako:
+   i=7007 mjd=0
+  i=7008 mjd=58070.8666666825 ===> 83622048.0000228 minutes difference
+Something is wrong in makeAttTako:
+   i=7102 mjd=0
+  i=7103 mjd=58070.932638905 ===> 83622143.0000232 minutes difference
+Something is wrong in makeAttTako:
+   i=7198 mjd=0
+  i=7199 mjd=58070.9993055719 ===> 83622239.0000235 minutes difference
+Something is wrong in makeAttTako:
+   i=7293 mjd=0
+  i=7294 mjd=58071.0652777943 ===> 83622334.0000238 minutes difference
+Something is wrong in makeAttTako:
+   i=7388 mjd=0
+  i=7389 mjd=58071.1312500167 ===> 83622429.0000241 minutes difference
+Something is wrong in makeAttTako:
+   i=7483 mjd=0
+  i=7484 mjd=58071.1972222392 ===> 83622524.0000244 minutes difference
+Something is wrong in makeAttTako:
+   i=7579 mjd=0
+  i=7580 mjd=58071.263888906 ===> 83622620.0000247 minutes difference
+Something is wrong in makeAttTako:
+   i=7674 mjd=0
+  i=7675 mjd=58071.3298611285 ===> 83622715.000025 minutes difference
+Something is wrong in makeAttTako:
+   i=7769 mjd=0
+  i=7770 mjd=58071.3958333509 ===> 83622810.0000253 minutes difference
+Something is wrong in makeAttTako:
+   i=7864 mjd=0
+  i=7865 mjd=58071.4618055734 ===> 83622905.0000256 minutes difference
+Something is wrong in makeAttTako:
+   i=7959 mjd=0
+  i=7960 mjd=58071.5277777958 ===> 83623000.0000259 minutes difference
+Something is wrong in makeAttTako:
+   i=8055 mjd=0
+  i=8056 mjd=58071.5944444627 ===> 83623096.0000263 minutes difference
+Something is wrong in makeAttTako:
+   i=8150 mjd=0
+  i=8151 mjd=58071.6604166851 ===> 83623191.0000266 minutes difference
+Something is wrong in makeAttTako:
+   i=8245 mjd=0
+  i=8246 mjd=58071.7263889076 ===> 83623286.0000269 minutes difference
+Something is wrong in makeAttTako:
+   i=8340 mjd=0
+  i=8341 mjd=58071.79236113 ===> 83623381.0000272 minutes difference
+Something is wrong in makeAttTako:
+   i=8436 mjd=0
+  i=8437 mjd=58071.8590277969 ===> 83623477.0000275 minutes difference
+Something is wrong in makeAttTako:
+   i=8531 mjd=0
+  i=8532 mjd=58071.9250000193 ===> 83623572.0000278 minutes difference
+Something is wrong in makeAttTako:
+   i=8626 mjd=0
+  i=8627 mjd=58071.9909722418 ===> 83623667.0000281 minutes difference
+Something is wrong in makeAttTako:
+   i=8721 mjd=0
+  i=8722 mjd=58072.0569444642 ===> 83623762.0000284 minutes difference
+Something is wrong in makeAttTako:
+   i=8816 mjd=0
+  i=8817 mjd=58072.1229166866 ===> 83623857.0000287 minutes difference
+Something is wrong in makeAttTako:
+   i=8912 mjd=0
+  i=8913 mjd=58072.1895833535 ===> 83623953.0000291 minutes difference
+Something is wrong in makeAttTako:
+   i=9007 mjd=0
+  i=9008 mjd=58072.2555555759 ===> 83624048.0000294 minutes difference
+Something is wrong in makeAttTako:
+   i=9102 mjd=0
+  i=9103 mjd=58072.3215277984 ===> 83624143.0000297 minutes difference
+Something is wrong in makeAttTako:
+   i=9197 mjd=0
+  i=9198 mjd=58072.3875000208 ===> 83624238.00003 minutes difference
+Something is wrong in makeAttTako:
+   i=9293 mjd=0
+  i=9294 mjd=58072.4541666877 ===> 83624334.0000303 minutes difference
+Something is wrong in makeAttTako:
+   i=9388 mjd=0
+  i=9389 mjd=58072.5201389101 ===> 83624429.0000306 minutes difference
+Something is wrong in makeAttTako:
+   i=9483 mjd=0
+  i=9484 mjd=58072.5861111326 ===> 83624524.0000309 minutes difference
+Something is wrong in makeAttTako:
+   i=9578 mjd=0
+  i=9579 mjd=58072.652083355 ===> 83624619.0000312 minutes difference
+Something is wrong in makeAttTako:
+   i=9673 mjd=0
+  i=9674 mjd=58072.7180555775 ===> 83624714.0000315 minutes difference
+Something is wrong in makeAttTako:
+   i=9769 mjd=0
+  i=9770 mjd=58072.7847222443 ===> 83624810.0000318 minutes difference
+Something is wrong in makeAttTako:
+   i=9864 mjd=0
+  i=9865 mjd=58072.8506944668 ===> 83624905.0000322 minutes difference
+Something is wrong in makeAttTako:
+   i=9959 mjd=0
+  i=9960 mjd=58072.9166666892 ===> 83625000.0000325 minutes difference
+Something is wrong in makeAttTako:
+   i=10054 mjd=0
+  i=10055 mjd=58072.9826389116 ===> 83625095.0000328 minutes difference
+E
+Warning: FitsFileManager::closeFile could not update checksum due to blank keyword/presence of COMMENT/HISTORY.
+E
+WARNING ===> At k=9, Interval (from Start time 531881760) is 2940, while resolution is 60
+WARNING ===> At k=9, Interval (from Stop time 531881820) is 2940, while resolution is 60
+WARNING ===> At k=57, Interval (from Start time 531887460) is 2880, while resolution is 60
+WARNING ===> At k=57, Interval (from Stop time 531887520) is 2880, while resolution is 60
+WARNING ===> At k=105, Interval (from Start time 531893160) is 2880, while resolution is 60
+WARNING ===> At k=105, Interval (from Stop time 531893220) is 2880, while resolution is 60
+WARNING ===> At k=153, Interval (from Start time 531898860) is 2880, while resolution is 60
+WARNING ===> At k=153, Interval (from Stop time 531898920) is 2880, while resolution is 60
+WARNING ===> At k=201, Interval (from Start time 531904560) is 2880, while resolution is 60
+WARNING ===> At k=201, Interval (from Stop time 531904620) is 2880, while resolution is 60
+WARNING ===> At k=249, Interval (from Start time 531910320) is 2940, while resolution is 60
+WARNING ===> At k=249, Interval (from Stop time 531910380) is 2940, while resolution is 60
+WARNING ===> At k=297, Interval (from Start time 531916020) is 2880, while resolution is 60
+WARNING ===> At k=297, Interval (from Stop time 531916080) is 2880, while resolution is 60
+WARNING ===> At k=345, Interval (from Start time 531921720) is 2880, while resolution is 60
+WARNING ===> At k=345, Interval (from Stop time 531921780) is 2880, while resolution is 60
+WARNING ===> At k=393, Interval (from Start time 531927420) is 2880, while resolution is 60
+WARNING ===> At k=393, Interval (from Stop time 531927480) is 2880, while resolution is 60
+WARNING ===> At k=441, Interval (from Start time 531933180) is 2940, while resolution is 60
+WARNING ===> At k=441, Interval (from Stop time 531933240) is 2940, while resolution is 60
+WARNING ===> At k=489, Interval (from Start time 531938880) is 2880, while resolution is 60
+WARNING ===> At k=489, Interval (from Stop time 531938940) is 2880, while resolution is 60
+WARNING ===> At k=537, Interval (from Start time 531944580) is 2880, while resolution is 60
+WARNING ===> At k=537, Interval (from Stop time 531944640) is 2880, while resolution is 60
+WARNING ===> At k=585, Interval (from Start time 531950280) is 2880, while resolution is 60
+WARNING ===> At k=585, Interval (from Stop time 531950340) is 2880, while resolution is 60
+WARNING ===> At k=633, Interval (from Start time 531956040) is 2940, while resolution is 60
+WARNING ===> At k=633, Interval (from Stop time 531956100) is 2940, while resolution is 60
+WARNING ===> At k=681, Interval (from Start time 531961740) is 2880, while resolution is 60
+WARNING ===> At k=681, Interval (from Stop time 531961800) is 2880, while resolution is 60
+WARNING ===> At k=729, Interval (from Start time 531967440) is 2880, while resolution is 60
+WARNING ===> At k=729, Interval (from Stop time 531967500) is 2880, while resolution is 60
+WARNING ===> At k=777, Interval (from Start time 531973140) is 2880, while resolution is 60
+WARNING ===> At k=777, Interval (from Stop time 531973200) is 2880, while resolution is 60
+WARNING ===> At k=825, Interval (from Start time 531978840) is 2880, while resolution is 60
+WARNING ===> At k=825, Interval (from Stop time 531978900) is 2880, while resolution is 60
+WARNING ===> At k=873, Interval (from Start time 531984600) is 2940, while resolution is 60
+WARNING ===> At k=873, Interval (from Stop time 531984660) is 2940, while resolution is 60
+WARNING ===> At k=921, Interval (from Start time 531990300) is 2880, while resolution is 60
+WARNING ===> At k=921, Interval (from Stop time 531990360) is 2880, while resolution is 60
+WARNING ===> At k=969, Interval (from Start time 531996000) is 2880, while resolution is 60
+WARNING ===> At k=969, Interval (from Stop time 531996060) is 2880, while resolution is 60
+WARNING ===> At k=1017, Interval (from Start time 532001700) is 2880, while resolution is 60
+WARNING ===> At k=1017, Interval (from Stop time 532001760) is 2880, while resolution is 60
+WARNING ===> At k=1065, Interval (from Start time 532007460) is 2940, while resolution is 60
+WARNING ===> At k=1065, Interval (from Stop time 532007520) is 2940, while resolution is 60
+WARNING ===> At k=1113, Interval (from Start time 532013160) is 2880, while resolution is 60
+WARNING ===> At k=1113, Interval (from Stop time 532013220) is 2880, while resolution is 60
+WARNING ===> At k=1161, Interval (from Start time 532018860) is 2880, while resolution is 60
+WARNING ===> At k=1161, Interval (from Stop time 532018920) is 2880, while resolution is 60
+WARNING ===> At k=1209, Interval (from Start time 532024560) is 2880, while resolution is 60
+WARNING ===> At k=1209, Interval (from Stop time 532024620) is 2880, while resolution is 60
+WARNING ===> At k=1257, Interval (from Start time 532030260) is 2880, while resolution is 60
+WARNING ===> At k=1257, Interval (from Stop time 532030320) is 2880, while resolution is 60
+WARNING ===> At k=1306, Interval (from Start time 532036020) is 2880, while resolution is 60
+WARNING ===> At k=1306, Interval (from Stop time 532036080) is 2880, while resolution is 60
+WARNING ===> At k=1354, Interval (from Start time 532041720) is 2880, while resolution is 60
+WARNING ===> At k=1354, Interval (from Stop time 532041780) is 2880, while resolution is 60
+WARNING ===> At k=1402, Interval (from Start time 532047420) is 2880, while resolution is 60
+WARNING ===> At k=1402, Interval (from Stop time 532047480) is 2880, while resolution is 60
+WARNING ===> At k=1450, Interval (from Start time 532053120) is 2880, while resolution is 60
+WARNING ===> At k=1450, Interval (from Stop time 532053180) is 2880, while resolution is 60
+WARNING ===> At k=1498, Interval (from Start time 532058880) is 2940, while resolution is 60
+WARNING ===> At k=1498, Interval (from Stop time 532058940) is 2940, while resolution is 60
+WARNING ===> At k=1546, Interval (from Start time 532064580) is 2880, while resolution is 60
+WARNING ===> At k=1546, Interval (from Stop time 532064640) is 2880, while resolution is 60
+WARNING ===> At k=1594, Interval (from Start time 532070280) is 2880, while resolution is 60
+WARNING ===> At k=1594, Interval (from Stop time 532070340) is 2880, while resolution is 60
+WARNING ===> At k=1642, Interval (from Start time 532075980) is 2880, while resolution is 60
+WARNING ===> At k=1642, Interval (from Stop time 532076040) is 2880, while resolution is 60
+WARNING ===> At k=1690, Interval (from Start time 532081740) is 2940, while resolution is 60
+WARNING ===> At k=1690, Interval (from Stop time 532081800) is 2940, while resolution is 60
+WARNING ===> At k=1738, Interval (from Start time 532087440) is 2880, while resolution is 60
+WARNING ===> At k=1738, Interval (from Stop time 532087500) is 2880, while resolution is 60
+WARNING ===> At k=1786, Interval (from Start time 532093140) is 2880, while resolution is 60
+WARNING ===> At k=1786, Interval (from Stop time 532093200) is 2880, while resolution is 60
+WARNING ===> At k=1834, Interval (from Start time 532098840) is 2880, while resolution is 60
+WARNING ===> At k=1834, Interval (from Stop time 532098900) is 2880, while resolution is 60
+WARNING ===> At k=1882, Interval (from Start time 532104540) is 2880, while resolution is 60
+WARNING ===> At k=1882, Interval (from Stop time 532104600) is 2880, while resolution is 60
+WARNING ===> At k=1931, Interval (from Start time 532110300) is 2880, while resolution is 60
+WARNING ===> At k=1931, Interval (from Stop time 532110360) is 2880, while resolution is 60
+WARNING ===> At k=1979, Interval (from Start time 532116000) is 2880, while resolution is 60
+WARNING ===> At k=1979, Interval (from Stop time 532116060) is 2880, while resolution is 60
+WARNING ===> At k=2027, Interval (from Start time 532121700) is 2880, while resolution is 60
+WARNING ===> At k=2027, Interval (from Stop time 532121760) is 2880, while resolution is 60
+WARNING ===> At k=2075, Interval (from Start time 532127400) is 2880, while resolution is 60
+WARNING ===> At k=2075, Interval (from Stop time 532127460) is 2880, while resolution is 60
+WARNING ===> At k=2123, Interval (from Start time 532133160) is 2940, while resolution is 60
+WARNING ===> At k=2123, Interval (from Stop time 532133220) is 2940, while resolution is 60
+WARNING ===> At k=2171, Interval (from Start time 532138860) is 2880, while resolution is 60
+WARNING ===> At k=2171, Interval (from Stop time 532138920) is 2880, while resolution is 60
+WARNING ===> At k=2219, Interval (from Start time 532144560) is 2880, while resolution is 60
+WARNING ===> At k=2219, Interval (from Stop time 532144620) is 2880, while resolution is 60
+WARNING ===> At k=2267, Interval (from Start time 532150260) is 2880, while resolution is 60
+WARNING ===> At k=2267, Interval (from Stop time 532150320) is 2880, while resolution is 60
+WARNING ===> At k=2315, Interval (from Start time 532156020) is 2940, while resolution is 60
+WARNING ===> At k=2315, Interval (from Stop time 532156080) is 2940, while resolution is 60
+WARNING ===> At k=2363, Interval (from Start time 532161720) is 2880, while resolution is 60
+WARNING ===> At k=2363, Interval (from Stop time 532161780) is 2880, while resolution is 60
+WARNING ===> At k=2411, Interval (from Start time 532167420) is 2880, while resolution is 60
+WARNING ===> At k=2411, Interval (from Stop time 532167480) is 2880, while resolution is 60
+WARNING ===> At k=2459, Interval (from Start time 532173120) is 2880, while resolution is 60
+WARNING ===> At k=2459, Interval (from Stop time 532173180) is 2880, while resolution is 60
+WARNING ===> At k=2507, Interval (from Start time 532178820) is 2880, while resolution is 60
+WARNING ===> At k=2507, Interval (from Stop time 532178880) is 2880, while resolution is 60
+WARNING ===> At k=2556, Interval (from Start time 532184580) is 2880, while resolution is 60
+WARNING ===> At k=2556, Interval (from Stop time 532184640) is 2880, while resolution is 60
+WARNING ===> At k=2604, Interval (from Start time 532190280) is 2880, while resolution is 60
+WARNING ===> At k=2604, Interval (from Stop time 532190340) is 2880, while resolution is 60
+WARNING ===> At k=2652, Interval (from Start time 532195980) is 2880, while resolution is 60
+WARNING ===> At k=2652, Interval (from Stop time 532196040) is 2880, while resolution is 60
+WARNING ===> At k=2700, Interval (from Start time 532201680) is 2880, while resolution is 60
+WARNING ===> At k=2700, Interval (from Stop time 532201740) is 2880, while resolution is 60
+WARNING ===> At k=2748, Interval (from Start time 532207440) is 2940, while resolution is 60
+WARNING ===> At k=2748, Interval (from Stop time 532207500) is 2940, while resolution is 60
+WARNING ===> At k=2796, Interval (from Start time 532213140) is 2880, while resolution is 60
+WARNING ===> At k=2796, Interval (from Stop time 532213200) is 2880, while resolution is 60
+WARNING ===> At k=2844, Interval (from Start time 532218840) is 2880, while resolution is 60
+WARNING ===> At k=2844, Interval (from Stop time 532218900) is 2880, while resolution is 60
+WARNING ===> At k=2892, Interval (from Start time 532224540) is 2880, while resolution is 60
+WARNING ===> At k=2892, Interval (from Stop time 532224600) is 2880, while resolution is 60
+WARNING ===> At k=2940, Interval (from Start time 532230240) is 2880, while resolution is 60
+WARNING ===> At k=2940, Interval (from Stop time 532230300) is 2880, while resolution is 60
+WARNING ===> At k=2989, Interval (from Start time 532236000) is 2880, while resolution is 60
+WARNING ===> At k=2989, Interval (from Stop time 532236060) is 2880, while resolution is 60
+WARNING ===> At k=3037, Interval (from Start time 532241700) is 2880, while resolution is 60
+WARNING ===> At k=3037, Interval (from Stop time 532241760) is 2880, while resolution is 60
+WARNING ===> At k=3085, Interval (from Start time 532247400) is 2880, while resolution is 60
+WARNING ===> At k=3085, Interval (from Stop time 532247460) is 2880, while resolution is 60
+WARNING ===> At k=3133, Interval (from Start time 532253100) is 2880, while resolution is 60
+WARNING ===> At k=3133, Interval (from Stop time 532253160) is 2880, while resolution is 60
+WARNING ===> At k=3181, Interval (from Start time 532258860) is 2940, while resolution is 60
+WARNING ===> At k=3181, Interval (from Stop time 532258920) is 2940, while resolution is 60
+WARNING ===> At k=3229, Interval (from Start time 532264560) is 2880, while resolution is 60
+WARNING ===> At k=3229, Interval (from Stop time 532264620) is 2880, while resolution is 60
+WARNING ===> At k=3277, Interval (from Start time 532270260) is 2880, while resolution is 60
+WARNING ===> At k=3277, Interval (from Stop time 532270320) is 2880, while resolution is 60
+WARNING ===> At k=3325, Interval (from Start time 532275960) is 2880, while resolution is 60
+WARNING ===> At k=3325, Interval (from Stop time 532276020) is 2880, while resolution is 60
+WARNING ===> At k=3373, Interval (from Start time 532281720) is 2940, while resolution is 60
+WARNING ===> At k=3373, Interval (from Stop time 532281780) is 2940, while resolution is 60
+WARNING ===> At k=3421, Interval (from Start time 532287420) is 2880, while resolution is 60
+WARNING ===> At k=3421, Interval (from Stop time 532287480) is 2880, while resolution is 60
+WARNING ===> At k=3469, Interval (from Start time 532293120) is 2880, while resolution is 60
+WARNING ===> At k=3469, Interval (from Stop time 532293180) is 2880, while resolution is 60
+WARNING ===> At k=3517, Interval (from Start time 532298820) is 2880, while resolution is 60
+WARNING ===> At k=3517, Interval (from Stop time 532298880) is 2880, while resolution is 60
+WARNING ===> At k=3565, Interval (from Start time 532304520) is 2880, while resolution is 60
+WARNING ===> At k=3565, Interval (from Stop time 532304580) is 2880, while resolution is 60
+WARNING ===> At k=3614, Interval (from Start time 532310280) is 2880, while resolution is 60
+WARNING ===> At k=3614, Interval (from Stop time 532310340) is 2880, while resolution is 60
+WARNING ===> At k=3662, Interval (from Start time 532315980) is 2880, while resolution is 60
+WARNING ===> At k=3662, Interval (from Stop time 532316040) is 2880, while resolution is 60
+WARNING ===> At k=3710, Interval (from Start time 532321680) is 2880, while resolution is 60
+WARNING ===> At k=3710, Interval (from Stop time 532321740) is 2880, while resolution is 60
+WARNING ===> At k=3758, Interval (from Start time 532327380) is 2880, while resolution is 60
+WARNING ===> At k=3758, Interval (from Stop time 532327440) is 2880, while resolution is 60
+WARNING ===> At k=3806, Interval (from Start time 532333140) is 2940, while resolution is 60
+WARNING ===> At k=3806, Interval (from Stop time 532333200) is 2940, while resolution is 60
+WARNING ===> At k=3854, Interval (from Start time 532338840) is 2880, while resolution is 60
+WARNING ===> At k=3854, Interval (from Stop time 532338900) is 2880, while resolution is 60
+WARNING ===> At k=3902, Interval (from Start time 532344540) is 2880, while resolution is 60
+WARNING ===> At k=3902, Interval (from Stop time 532344600) is 2880, while resolution is 60
+WARNING ===> At k=3950, Interval (from Start time 532350240) is 2880, while resolution is 60
+WARNING ===> At k=3950, Interval (from Stop time 532350300) is 2880, while resolution is 60
+WARNING ===> At k=3998, Interval (from Start time 532355940) is 2880, while resolution is 60
+WARNING ===> At k=3998, Interval (from Stop time 532356000) is 2880, while resolution is 60
+WARNING ===> At k=4047, Interval (from Start time 532361700) is 2880, while resolution is 60
+WARNING ===> At k=4047, Interval (from Stop time 532361760) is 2880, while resolution is 60
+WARNING ===> At k=4095, Interval (from Start time 532367400) is 2880, while resolution is 60
+WARNING ===> At k=4095, Interval (from Stop time 532367460) is 2880, while resolution is 60
+WARNING ===> At k=4143, Interval (from Start time 532373100) is 2880, while resolution is 60
+WARNING ===> At k=4143, Interval (from Stop time 532373160) is 2880, while resolution is 60
+WARNING ===> At k=4191, Interval (from Start time 532378800) is 2880, while resolution is 60
+WARNING ===> At k=4191, Interval (from Stop time 532378860) is 2880, while resolution is 60
+WARNING ===> At k=4239, Interval (from Start time 532384560) is 2940, while resolution is 60
+WARNING ===> At k=4239, Interval (from Stop time 532384620) is 2940, while resolution is 60
+WARNING ===> At k=4287, Interval (from Start time 532390260) is 2880, while resolution is 60
+WARNING ===> At k=4287, Interval (from Stop time 532390320) is 2880, while resolution is 60
+WARNING ===> At k=4335, Interval (from Start time 532395960) is 2880, while resolution is 60
+WARNING ===> At k=4335, Interval (from Stop time 532396020) is 2880, while resolution is 60
+WARNING ===> At k=4383, Interval (from Start time 532401660) is 2880, while resolution is 60
+WARNING ===> At k=4383, Interval (from Stop time 532401720) is 2880, while resolution is 60
+WARNING ===> At k=4431, Interval (from Start time 532407360) is 2880, while resolution is 60
+WARNING ===> At k=4431, Interval (from Stop time 532407420) is 2880, while resolution is 60
+WARNING ===> At k=4480, Interval (from Start time 532413120) is 2880, while resolution is 60
+WARNING ===> At k=4480, Interval (from Stop time 532413180) is 2880, while resolution is 60
+WARNING ===> At k=4528, Interval (from Start time 532418820) is 2880, while resolution is 60
+WARNING ===> At k=4528, Interval (from Stop time 532418880) is 2880, while resolution is 60
+WARNING ===> At k=4576, Interval (from Start time 532424520) is 2880, while resolution is 60
+WARNING ===> At k=4576, Interval (from Stop time 532424580) is 2880, while resolution is 60
+WARNING ===> At k=4624, Interval (from Start time 532430220) is 2880, while resolution is 60
+WARNING ===> At k=4624, Interval (from Stop time 532430280) is 2880, while resolution is 60
+WARNING ===> At k=4672, Interval (from Start time 532435980) is 2940, while resolution is 60
+WARNING ===> At k=4672, Interval (from Stop time 532436040) is 2940, while resolution is 60
+WARNING ===> At k=4720, Interval (from Start time 532441680) is 2880, while resolution is 60
+WARNING ===> At k=4720, Interval (from Stop time 532441740) is 2880, while resolution is 60
+WARNING ===> At k=4768, Interval (from Start time 532447380) is 2880, while resolution is 60
+WARNING ===> At k=4768, Interval (from Stop time 532447440) is 2880, while resolution is 60
+WARNING ===> At k=4816, Interval (from Start time 532453080) is 2880, while resolution is 60
+WARNING ===> At k=4816, Interval (from Stop time 532453140) is 2880, while resolution is 60
+WARNING ===> At k=4864, Interval (from Start time 532458780) is 2880, while resolution is 60
+WARNING ===> At k=4864, Interval (from Stop time 532458840) is 2880, while resolution is 60
+WARNING ===> At k=4913, Interval (from Start time 532464540) is 2880, while resolution is 60
+WARNING ===> At k=4913, Interval (from Stop time 532464600) is 2880, while resolution is 60
+WARNING ===> At k=4961, Interval (from Start time 532470240) is 2880, while resolution is 60
+WARNING ===> At k=4961, Interval (from Stop time 532470300) is 2880, while resolution is 60
+WARNING ===> At k=5009, Interval (from Start time 532475940) is 2880, while resolution is 60
+WARNING ===> At k=5009, Interval (from Stop time 532476000) is 2880, while resolution is 60
+WARNING ===> At k=5057, Interval (from Start time 532481640) is 2880, while resolution is 60
+WARNING ===> At k=5057, Interval (from Stop time 532481700) is 2880, while resolution is 60
