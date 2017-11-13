@@ -23,12 +23,12 @@ Timeline::Timeline(){};
 
 Timeline::Timeline(char const* filename)
 {
-  Timeline::populate(filename);
+  populate(filename);
 }
 
 Timeline::Timeline(std::string filename)
 {
-  Timeline::Timeline(filename.c_str());
+  Timeline(filename.c_str());
 }
 
 void
@@ -62,5 +62,5 @@ Timeline::populate(char const* filename)
 void
 Timeline::populate(std::string filename)
 {
-  Timeline::populate(filename.c_str());
+  populate(filename.c_str());
 }
