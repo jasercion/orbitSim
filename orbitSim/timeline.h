@@ -277,7 +277,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 
       rocktime_angle %= lit("//") >> qi::omit[digit >> digit] >> double_ >> double_ ;
 
-      rocking_profile %=
+      tl_rocking_profile %=
         lit("//") >> lit("Rocking Profile:")
         >> lit("//")>>lit("ROCKSTART") >> "=" >> timestamp >> '(' >> double_ >> ')'
         >> lit("//") >> lit("ROCKDEFAULT") >> "=" >> double_
@@ -303,7 +303,7 @@ BOOST_FUSION_ADAPT_STRUCT(
         ;
 
 
-      opt_evt_fields =
+      tl_opt_evt_fields =
         (lit("//") >> lit("prop_ID") >> "=" >> one_liner) [at_c<0>(_val) = _1]
         ^ (lit("//") >> lit("target_name") >> "=" >> one_liner) [at_c<1>(_val) = _1]
         ^ (lit("//") >> lit("offset") >> "=" >> qi::double_ >> lit("deg")) [at_c<2>(_val) = _1]
@@ -324,7 +324,7 @@ BOOST_FUSION_ADAPT_STRUCT(
         // fields to hold them, the dupRA and dupDEC fields.
         ^ RA[at_c<12>(_val) = _1]
         ^ DEC[at_c<13>(_val) = _1]
-        ^ rocking_profile[at_c<14>(_val) = _1]
+        ^ tl_rocking_profile[at_c<14>(_val) = _1]
         ;
 
 
@@ -337,18 +337,18 @@ BOOST_FUSION_ADAPT_STRUCT(
         >> (string("Survey") | string("Obs") | string("Profile"))
         >> (string("Begin") | string("End") )
         >> -(lit("obs_number") >> "=" >> lexeme[ string("Global") | +(digit | char_("-")) ])
-        >> -opt_evt_fields
+        >> -tl_opt_evt_fields
         ;
 
 
-      initial %=
+      tl_initial %=
         lit("//") >> "Mission Week:" >> int_
         >> "//" >> "Timeline Name:" >> lexeme[+(qi::graph)]
         >> lit("Created:") >> timestamp
         >> "//" >> "Created with" >> one_liner
         >> "//" >> "Initial pointing" >> RA >> DEC
         >> "//" >> "Initial survey-related flight parameter settings"
-        >> rocking_profile
+        >> tl_rocking_profile
         >> -event
         >> "//"
         >> "//" >> "Input files:"
@@ -393,7 +393,7 @@ BOOST_FUSION_ADAPT_STRUCT(
         >> ";"
         ;
 
-      generic_comment %= !(event | initial)
+      generic_comment %= !(event | tl_initial)
         >> lit("//")
         >> one_liner
         ;
@@ -403,7 +403,7 @@ BOOST_FUSION_ADAPT_STRUCT(
       timeline = *ignored
         >> -header [at_c<0>(_val) = _1]
         >> *ignored
-        >> -initial [at_c<1>(_val) = _1]
+        >> -tl_initial [at_c<1>(_val) = _1]
         >> *ignored
         >> *(event [phoenix::push_back(at_c<2>(_val), _1)]
             | ignored) >> *ignored
@@ -417,10 +417,10 @@ BOOST_FUSION_ADAPT_STRUCT(
     // Rules to parse compnents of a timeline file into their various
     // data structures needed for the timeline object.
     qi::rule<Iterator, timeline_header(), ascii::space_type> header;
-    qi::rule<Iterator, initial(), ascii::space_type> initial;
+    qi::rule<Iterator, initial(), ascii::space_type> tl_initial;
     qi::rule<Iterator, timeline_event(), ascii::space_type> event;
-    qi::rule<Iterator, opt_evt_fields(), ascii::space_type> opt_evt_fields;
-    qi::rule<Iterator, rocking_profile(), ascii::space_type> rocking_profile;
+    qi::rule<Iterator, opt_evt_fields(), ascii::space_type> tl_opt_evt_fields;
+    qi::rule<Iterator, rocking_profile(), ascii::space_type> tl_rocking_profile;
     qi::rule<Iterator, rockprofile_pair(), ascii::space_type> rocktime_angle;
 
     // Sub-parsers
