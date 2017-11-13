@@ -138,7 +138,6 @@ orbitSimApp::run()
   if (match_str((const char*)Input.c_str(), "FILE") == 1)
   {
     pars.Prompt("initFile");
-    /* std::cout << "Parsing Input File" << std::endl; */
 
     std::string initFile = pars["initFile"];
     const char* fname = initFile.c_str();
@@ -236,7 +235,6 @@ orbitSimApp::run()
 
   if (stat == 0)
   {
-    /* std::cout << "Reading initf structure" << std::endl; */
     std::ostringstream oBuf;
     // TODO MJM not particularly helpful error messages
     oBuf << "\n############################################################"
@@ -270,7 +268,6 @@ orbitSimApp::run()
   //  fday 1 is the fraction of the day in minutes
   //  fday 2 is the fraction of the day rounded to the units of the current
   //  resolution fraction part of start time is replaced
-  /* cout << "A" <<endl; */
   double stmjd = initf.start_MJD;
   double fday = (stmjd - (double)((int)stmjd)) * 1440.0;
   fday = (double)((int)(fday / initf.Resolution) - 1) * initf.Resolution;
@@ -310,7 +307,6 @@ orbitSimApp::run()
 
   FILE* ephF = NULL;
 
-  /* cout << "B" << endl; */
   osf.info(2) << "Opening Ephemeris file " << initf.EPHname << " for reading\n";
   if ((ephF = fopen(initf.EPHname.c_str(), "r")) == NULL)
   {
@@ -341,7 +337,6 @@ orbitSimApp::run()
   }
 
   fclose(ephF);
-  /* cout << "C" << endl; */
   if (ephemeris == NULL)
   {
     throw std::runtime_error(
@@ -358,9 +353,7 @@ orbitSimApp::run()
   // Basically all calculations are done by whatever this calls.
   if (match_str(initf.TLtype.c_str(), "TAKO") == 1)
   {
-    /* cout << "D" <<endl; */
     Oat = makeAttTako(&initf, ephemeris);
-    /* cout << "E" <<endl; */
   }
   else if (match_str(initf.TLtype.c_str(), "ASFLOWN") == 1)
   {
@@ -407,7 +400,6 @@ orbitSimApp::run()
 
   double metstart, metstop;
 
-  /* cout << "E" <<endl; */
   sprintf(ts,
     "%4d-%02d-%02dT%02d:%02d:%02d",
     ptm->tm_year,

@@ -40,104 +40,104 @@
 #include <complex>
 #include <vector>
 
-  namespace qi = boost::spirit::qi;
-  namespace phoenix = boost::phoenix;
-  namespace ascii = boost::spirit::ascii;
+namespace qi = boost::spirit::qi;
+namespace phoenix = boost::phoenix;
+namespace ascii = boost::spirit::ascii;
 
-  struct rockprofile_pair
-  {
-    double rocktime;
-    double rockangle;
-  };
+struct rockprofile_pair
+{
+  double rocktime;
+  double rockangle;
+};
 
-  struct rocking_profile
-  {
-    std::string rockstart;
-    double rockstart_met;
-    double rockdefault;
-    std::vector<rockprofile_pair> pairs;
-  };
+struct rocking_profile
+{
+  std::string rockstart;
+  double rockstart_met;
+  double rockdefault;
+  std::vector<rockprofile_pair> pairs;
+};
 
-  struct opt_evt_fields
-  {
-    std::string prop_ID;
-    std::string target_name;
-    double offset;
-    double RA;
-    double DEC;
-    std::string PI;
-    std::string comment;
-    int week;
-    int SSN;
-    double duration;
-    int slew;
-    int saa;
-    double dupRA;
-    double dupDEC;
-    rocking_profile profile;
-  };
+struct opt_evt_fields
+{
+  std::string prop_ID;
+  std::string target_name;
+  double offset;
+  double RA;
+  double DEC;
+  std::string PI;
+  std::string comment;
+  int week;
+  int SSN;
+  double duration;
+  int slew;
+  int saa;
+  double dupRA;
+  double dupDEC;
+  rocking_profile profile;
+};
 
-  struct timeline_event
-  {
-    std::string timestamp;
-    std::string event_name;
-    std::string event_type;
-    std::string obs_number;
+struct timeline_event
+{
+  std::string timestamp;
+  std::string event_name;
+  std::string event_type;
+  std::string obs_number;
 
-    //Optional fields
-    opt_evt_fields additional;
-  };
+  //Optional fields
+  opt_evt_fields additional;
+};
 
-  struct initial{
-    int week;
-    std::string timeline_name;
-    std::string create_time;
-    std::string creator;
-    double RA;
-    double DEC;
-    rocking_profile profile;
-    timeline_event event;
-    std::vector<std::string> tako_db;
-    std::vector<std::string> sc_ephem;
-    std::vector<std::string> saa;
-    std::vector<std::string> tdrss_ephem;
-    std::vector<std::string> tdrss_sched;
-    std::string prev_arr_thresh;
-  };
+struct initial{
+  int week;
+  std::string timeline_name;
+  std::string create_time;
+  std::string creator;
+  double RA;
+  double DEC;
+  rocking_profile profile;
+  timeline_event event;
+  std::vector<std::string> tako_db;
+  std::vector<std::string> sc_ephem;
+  std::vector<std::string> saa;
+  std::vector<std::string> tdrss_ephem;
+  std::vector<std::string> tdrss_sched;
+  std::string prev_arr_thresh;
+};
 
-  struct timeline_header
-  {
-    std::string filename;
-    std::string creation_time;
-    std::string mission_id;
-    std::string originator;
-    std::string db_version;
-    std::string dest_processor;
-    std::string start_time;
-    std::string stop_time;
-    std::string execute_flag;
-    std::string timeline_type;
-    std::string version_num;
-    std::string ref_timeline_name;
-    std::string comment;
-  };
+struct timeline_header
+{
+  std::string filename;
+  std::string creation_time;
+  std::string mission_id;
+  std::string originator;
+  std::string db_version;
+  std::string dest_processor;
+  std::string start_time;
+  std::string stop_time;
+  std::string execute_flag;
+  std::string timeline_type;
+  std::string version_num;
+  std::string ref_timeline_name;
+  std::string comment;
+};
 
-  struct command
-  {
-    std::string time;
-    std::string type;
-    std::string order;
-    //std::vector<std::string> params;
-    std::string params;
-  };
+struct command
+{
+  std::string time;
+  std::string type;
+  std::string order;
+  //std::vector<std::string> params;
+  std::string params;
+};
 
-  struct timeline_wrapper
-  {
-    timeline_header header;
-    initial init;
-    //std::vector<command> commands;
-    std::vector<timeline_event> events;
-  };
+struct timeline_wrapper
+{
+  timeline_header header;
+  initial init;
+  //std::vector<command> commands;
+  std::vector<timeline_event> events;
+};
 
 BOOST_FUSION_ADAPT_STRUCT(
     rockprofile_pair,
@@ -336,7 +336,7 @@ BOOST_FUSION_ADAPT_STRUCT(
         lit("//") >> timestamp
         >> (string("Survey") | string("Obs") | string("Profile"))
         >> (string("Begin") | string("End") )
-        >> (lit("obs_number") >> "=" >> lexeme[ string("Global") | +(digit | char_("-")) ])
+        >> -(lit("obs_number") >> "=" >> lexeme[ string("Global") | +(digit | char_("-")) ])
         >> -opt_evt_fields
         ;
 
@@ -451,7 +451,7 @@ class Timeline
 {
 public:
   /* Constructors */
-  Timeline() = default;
+  Timeline();
   Timeline(char const* filename);
   Timeline(std::string filename);
 

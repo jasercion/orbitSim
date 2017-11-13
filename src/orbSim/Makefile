@@ -6,7 +6,7 @@ HD_CXXTASK              = gtorbsim
 
 HD_CXXTASK_SRC_cxx      = main.cxx
 
-HD_CXXFLAGS             = -std=c++11 ${HD_STD_CXXFLAGS} -I../../
+HD_CXXFLAGS             = ${HD_STD_CXXFLAGS} -I../../
 
 HD_CXXLIBS              = ${HD_LFLAGS} \
 													${GT_ORBITSIM_LIBS} \
