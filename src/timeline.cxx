@@ -19,7 +19,7 @@
 #include "orbitSim/timeline.h"
 #include <stdlib.h>
 
-Timeline::Timeline(){};
+Timeline::Timeline(){}
 
 Timeline::Timeline(char const* filename)
 {
