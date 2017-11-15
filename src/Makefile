@@ -13,7 +13,7 @@ HD_LIBRARY_SRC_cxx      = timeline.cxx \
 
 HD_SUBDIRS              = orbSim
 
-HD_CXXFLAGS             = -std=c++0x ${HD_STD_CXXFLAGS}
+HD_CXXFLAGS             = ${HD_STD_CXXFLAGS}
 
 HD_INSTALL_LIBRARIES    = ${HD_LIBRARY_ROOT}
 
